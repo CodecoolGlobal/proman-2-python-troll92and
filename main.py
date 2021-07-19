@@ -3,6 +3,8 @@ from util import json_response
 
 import queires
 
+import mimetypes
+mimetypes.add_type('application/javascript', '.js')
 app = Flask(__name__)
 
 
