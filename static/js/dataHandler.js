@@ -6,7 +6,9 @@ export let dataHandler = {
     getBoard: async function(boardId) {
         // the board is retrieved and then the callback function is called with the board
     },
-    getStatuses: async function () {
+    getColumns: async function () {
+        let response = await apiGet(`/get-columns`)
+        return response
         // the statuses are retrieved and then the callback function is called with the statuses
     },
     getStatus: async function (statusId) {

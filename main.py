@@ -25,6 +25,15 @@ def get_boards():
     return queires.get_boards()
 
 
+@app.route("/get-columns")
+@json_response
+def get_columns():
+    """
+    All the columns
+    """
+    return queires.get_all_columns()
+
+
 @app.route("/get-cards/<int:board_id>")
 @json_response
 def get_cards_for_board(board_id: int):
