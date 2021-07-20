@@ -14,6 +14,7 @@ body{
 
 h1, .board-title, .board-column-title{
     font-weight: 100;
+    text-align: center;
 }
 
 h1{
@@ -22,20 +23,36 @@ h1{
     letter-spacing: 5px;
     transform: scale(1.2, 1);
 }
+span{
+    text-align: center;
+    vertical-align: middle;
+}
+.board-title{
+    text-align: center;
+}
 
-.toggle-board-button{
+.add-new-card{
     background: #222;
     color: #fff;
-    border: none;
     font-size: 14px;
     font-family: sans-serif;
     padding: 4px 10px;
 }
 
+.toggle-board-button{
+    background: #222;
+    color: #fff;
+    font-size: 14px;
+    font-family: sans-serif;
+    padding: 4px 10px;
+    margin-left: auto;
+    margin-right: 0;
+}
+
 .board-container{
     max-width: 960px;
-    margin: 0 auto;
     background: white;
+    margin-bottom:20px;
 }
 
 section.board{
@@ -46,7 +63,7 @@ section.board{
 }
 
 .board-header{
-    height: 30px;
+    height: 50px;
     background: #fff;
     border-radius: var(--border-radius) var(--border-radius) 0 0;
     display:flex;
@@ -56,19 +73,14 @@ section.board{
     margin: 13px;
     font-size: 20px;
 }
-/*
-.board-title, .add-new-card, .toggle-board-button{
-    display: inline-block;
-}*/
 
 .board-toggle{
     float: right;
     margin: 13px;
 }
-
 .board-columns{
-    display: flex;
-    flex-wrap: nowrap;
+    display:flex;
+    flex-wrap:nowrap;
 }
 
 .board-column{
