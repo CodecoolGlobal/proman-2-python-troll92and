@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request
 from util import json_response
 
 import queires
@@ -42,6 +42,42 @@ def get_cards_for_board(board_id: int):
     :param board_id: id of the parent board
     """
     return queires.get_cards_for_board(board_id)
+
+
+@app.route("/get-cards/<int:board_id>/<int:column_id>")
+@json_response
+def get_card_order(board_id: int, column_id: int):
+    """
+    All cards that belongs to a board
+    :param board_id: id of the parent board
+    :param column_id: id of the parent column board
+    """
+
+    return queires.get_card_order(board_id, column_id)
+
+
+@app.route("/get-last-card-id")
+@json_response
+def get_last_card_id():
+    return queires.get_max_id_card()
+
+
+@app.route("/get-last-board-id")
+@json_response
+def get_last_board():
+    return queires.get_max_id_board()
+
+
+@app.route("/add-new-card/<data>", methods=["POST"])
+@json_response
+def add_new_card(data):
+    queires.add_new_card(list(data.split(',')))
+
+
+@app.route("/add-new-board/<data>", methods=["POST"])
+@json_response
+def add_new_board(data):
+    queires.add_new_board(data)
 
 
 def main():

@@ -17,3 +17,8 @@ export let cardsManager = {
 function deleteButtonHandler(clickEvent) {
 }
 
+async function cardOrder(boardId, columnId){
+    const cards = await dataHandler.getCardOrderByBoardColumnId(boardId,columnId);
+
+}
+

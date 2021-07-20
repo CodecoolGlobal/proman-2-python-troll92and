@@ -18,15 +18,34 @@ export let dataHandler = {
         let response = await apiGet(`/get-cards/${boardId}`)
         return response
     },
+    getCardOrderByBoardColumnId: async function (boardId, columnId) {
+        let response = await apiGet(`/get-cards/${boardId}/${columnId}`)
+        return response
+    },
+    getLastCardId: async function () {
+        let response = await apiGet(`/get-last-card-id`)
+        return response
+    },
+    getLastBoardId: async function () {
+        let response = await apiGet(`/get-last-board-id`)
+        return response
+    },
+
     getCard: async function (cardId) {
         // the card is retrieved and then the callback function is called with the card
     },
+
     createNewBoard: async function (boardTitle) {
-        // creates new board, saves it and calls the callback function with its data
-    },
-    createNewCard: async function (cardTitle, boardId, statusId) {
         // creates new card, saves it and calls the callback function with its data
+        await apiPost(`/add-new-board/${boardTitle}`)
+    },
+
+    createNewCard: async function (cardTitle, boardId, statusId, cardOrder) {
+        // creates new card, saves it and calls the callback function with its data
+        let payload = [cardTitle, boardId, statusId, cardOrder];
+        await apiPost(`/add-new-card/${payload}`)
     }
+
 };
 
 async function apiGet(url) {
@@ -39,15 +58,11 @@ async function apiGet(url) {
     }
 }
 
-async function apiPost(url, payload) {
-    let response = await fetch(url, {
+async function apiPost(url) {
+    await fetch(url, {
         method: 'POST',
-        value: payload
     })
-    if (response.status === 200) {
-        let data = response.json()
-        return data
-    }
+    console.log(url)
 }
 
 async function apiDelete(url) {
