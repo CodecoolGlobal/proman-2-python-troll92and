@@ -40,6 +40,14 @@ async function apiGet(url) {
 }
 
 async function apiPost(url, payload) {
+    let response = await fetch(url, {
+        method: 'POST',
+        value: payload
+    })
+    if (response.status === 200) {
+        let data = response.json()
+        return data
+    }
 }
 
 async function apiDelete(url) {

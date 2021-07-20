@@ -40,6 +40,6 @@ function columnBuilder(column) {
 }
 
 function cardBuilder(card) {
-    return `<div class="card" data-card-id="${card.id}">${card.title}<div class="card-remove">X</div></div>`;//bad position
+    return `<div class="card" data-card-id="${card.id}">${card.title}<div class="card-remove">X</div></div>`;
 }
 

@@ -11,6 +11,7 @@ export let boardsManager = {
             const boardBuilder = htmlFactory(htmlTemplates.board);
             const content = boardBuilder(board)
             domManager.addChild("#root", content)
+            domManager.addEventListener(`.add-new-card[new-card-id="${board.id}"]`, "click", addCard)
             domManager.addEventListener(`.toggle-board-button[data-board-id="${board.id}"]`, "click", showHideButtonHandler)
         }
     },
@@ -35,3 +36,16 @@ async function showHideButtonHandler(clickEvent) {
         await cardsManager.loadCards(boardId)
     }
 }
+
+async function addCard(clickEvent) {
+    const boardId = clickEvent.target.attributes['new-card-id'].nodeValue;
+    let card = {
+        id : 1,
+        title : "New Card"
+    }
+    const cardBuilder = htmlFactory(htmlTemplates.card);
+    card = cardBuilder(card)
+    domManager.addChild(`.board-container[board-id="${boardId}"] .board-columns .board-column[data-column-id="1"] .board-column-content`, card);
+}
+
+
