@@ -18,7 +18,20 @@ export let boardsManager = {
 
 async function showHideButtonHandler(clickEvent) {
     const boardId = clickEvent.target.dataset.boardId
-    await columnsManager.loadColumns(boardId);
-    await cardsManager.loadCards(boardId)
-    //hide side
+    let boards = document.getElementsByClassName('board-container');
+    let current_board = "";
+    for (let board of boards) {
+        if(clickEvent.target.dataset.boardId === board.attributes['board-id'].nodeValue) {
+            current_board = board;
+        }
+    }
+    console.log(current_board.getElementsByClassName('board-columns')[0]);
+    if (current_board.getElementsByClassName('board-columns')[0].innerText.length > 0) {
+        current_board.getElementsByClassName('board-columns')[0].innerHTML = "";
+        current_board.getElementsByClassName('toggle-board-button')[0].innerText = "Show Cards";
+    } else {
+        current_board.getElementsByClassName('toggle-board-button')[0].innerText = "Hide Cards";
+        await columnsManager.loadColumns(boardId);
+        await cardsManager.loadCards(boardId)
+    }
 }
