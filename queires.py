@@ -141,3 +141,40 @@ def add_new_board(cursor, data):
             title=sql.Literal(data)
         )
     )
+
+
+@data_manager.connection_handler
+def delete_board_by_id(cursor, board_id):
+    cursor.execute(
+        sql.SQL("""
+            DELETE FROM boards
+            WHERE id={board_id}
+        """).format(
+                    board_id=sql.Literal(board_id)
+        )
+    )
+
+
+@data_manager.connection_handler
+def delete_all_cards_by_board_id(cursor, board_id):
+    cursor.execute(
+        sql.SQL("""
+            DELETE FROM cards
+            WHERE board_id={board_id}
+        """).format(
+                    board_id=sql.Literal(board_id)
+        )
+    )
+
+
+@data_manager.connection_handler
+def delete_all_statuses_by_board_id(cursor, board_id):
+    cursor.execute(
+        sql.SQL("""
+            DELETE FROM statuses
+            WHERE owner={board_id}
+        """).format(
+            board_id=sql.Literal(board_id)
+        )
+    )
+

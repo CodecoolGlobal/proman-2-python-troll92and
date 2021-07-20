@@ -92,6 +92,14 @@ def add_new_board(data):
     queires.add_new_board(data)
 
 
+@app.route("/delete-board-by-id/<int:board_id>", methods=["POST"])
+@json_response
+def delete_board_by_id(board_id):
+    queires.delete_all_cards_by_board_id(board_id)
+    queires.delete_all_statuses_by_board_id(str(board_id))
+    queires.delete_board_by_id(board_id)
+
+
 def main():
     app.run(debug=True)
 

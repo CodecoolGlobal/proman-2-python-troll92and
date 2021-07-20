@@ -13,10 +13,11 @@ export let boardsManager = {
         const boards = await dataHandler.getBoards();
         for (let board of boards) {
             const boardBuilder = htmlFactory(htmlTemplates.board);
-            const content = boardBuilder(board)
+            const content = await boardBuilder(board)
             domManager.addChild("#root", content)
             domManager.addEventListener(`.add-new-card[new-card-id="${board.id}"]`, "click", addCard)
             domManager.addEventListener(`.add-new-status[new-status-id="${board.id}"]`, "click", addStatus)
+            domManager.addEventListener(`.delete-board-button[delete-board-id="${board.id}"]`, "click", deleteBoard)
             domManager.addEventListener(`.toggle-board-button[data-board-id="${board.id}"]`, "click", showHideButtonHandler)
         }
 
@@ -56,6 +57,7 @@ async function addBoard(){
     domManager.addEventListener(`.add-new-card[new-card-id="${board.id}"]`, "click", addCard)
     domManager.addEventListener(`.add-new-status[new-status-id="${board.id}"]`, "click", addStatus)
     domManager.addEventListener(`.toggle-board-button[data-board-id="${board.id}"]`, "click", showHideButtonHandler)
+    domManager.addEventListener(`.delete-board-button[delete-board-id="${board.id}"]`, "click", deleteBoard)
 }
 
 
@@ -87,3 +89,20 @@ async function addCard(clickEvent) {
     card = cardBuilder(card)
     domManager.addChild(`.board-container[board-id="${boardId}"] .board-columns .board-column[data-column-id="1"] .board-column-content`, card);
 }
+
+
+async function deleteBoard(clickEvent){
+    const boardId = clickEvent.target.attributes['delete-board-id'].nodeValue;
+    console.log('hit')
+    await dataHandler.deleteBoardById(boardId)
+    let boards = document.getElementsByClassName('board-container');
+    for (let board of boards) {
+        console.log(board.attributes['board-id'].nodeValue)
+        if(boardId === board.attributes['board-id'].nodeValue) {
+            root.removeChild(board)
+            break;
+        }
+    }
+}
+
+
