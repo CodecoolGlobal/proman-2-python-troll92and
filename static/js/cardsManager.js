@@ -8,7 +8,7 @@ export let cardsManager = {
         for (let card of cards) {
             const cardBuilder = htmlFactory(htmlTemplates.card);
             const content = cardBuilder(card)
-            domManager.addChild(`.board[data-board-id="${boardId}"]`, content)
+            domManager.addChild(`.board-container[board-id="${boardId}"] .board-columns .board-column[data-column-id="${card.status_id}"] .board-column-content`, content)
             domManager.addEventListener(`.card[data-card-id="${card.id}"]`, "click", deleteButtonHandler)
         }
     },

@@ -2,6 +2,7 @@ import { dataHandler } from "./dataHandler.js";
 import { htmlFactory, htmlTemplates } from "./htmlFactory.js";
 import { domManager } from "./domManager.js";
 import { cardsManager } from "./cardsManager.js";
+import { columnsManager } from "./columnManager.js";
 
 export let boardsManager = {
     loadBoards: async function () {
@@ -15,7 +16,9 @@ export let boardsManager = {
     },
 }
 
-function showHideButtonHandler(clickEvent) {
+async function showHideButtonHandler(clickEvent) {
     const boardId = clickEvent.target.dataset.boardId
-    cardsManager.loadCards(boardId)
+    await columnsManager.loadColumns(boardId);
+    await cardsManager.loadCards(boardId)
+    //hide side
 }
