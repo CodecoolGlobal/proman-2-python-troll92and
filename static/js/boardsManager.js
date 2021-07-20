@@ -16,8 +16,9 @@ export let boardsManager = {
     },
 }
 
-function showHideButtonHandler(clickEvent) {
+async function showHideButtonHandler(clickEvent) {
     const boardId = clickEvent.target.dataset.boardId
-    columnsManager.loadColumns(boardId)
-    cardsManager.loadCards(boardId)//hide side
+    await columnsManager.loadColumns(boardId);
+    await cardsManager.loadCards(boardId)
+    //hide side
 }

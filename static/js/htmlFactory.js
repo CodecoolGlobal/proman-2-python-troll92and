@@ -20,8 +20,7 @@ export function htmlFactory(template) {
 
 function boardBuilder(board) {
     return `<div class="board-container" board-id="${board.id}">
-                <div class="board-header">
-                    <p>${board.title}</p>
+                <div class="board-header"><span class="board-title">${board.title}</span>
                     <button class="add-new-card" new-card-id="${board.id}">New card</button>
                     <button class="toggle-board-button" data-board-id="${board.id}">Show Cards</button>
                 </div>
@@ -41,6 +40,6 @@ function columnBuilder(column) {
 }
 
 function cardBuilder(card) {
-    return `<div class="card" data-card-id="${card.id}">${card.title}</div>`;//<div class="card-remove">X</div>`;bad position
+    return `<div class="card" data-card-id="${card.id}">${card.title}<div class="card-remove">X</div></div>`;//bad position
 }
 

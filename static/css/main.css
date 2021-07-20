@@ -23,26 +23,13 @@ h1{
     transform: scale(1.2, 1);
 }
 
-board-header{
-    display:inline-block;
-}
-
-h2{
-    order:1;
-}
-
-add-new-card{
-    order:2;
-}
-
-toggle-board-button{
+.toggle-board-button{
     background: #222;
     color: #fff;
     border: none;
     font-size: 14px;
     font-family: sans-serif;
     padding: 4px 10px;
-    order:3;
 }
 
 .board-container{
@@ -59,18 +46,20 @@ section.board{
 }
 
 .board-header{
-    height: 50px;
+    height: 30px;
     background: #fff;
     border-radius: var(--border-radius) var(--border-radius) 0 0;
+    display:flex;
 }
 
 .board-title{
     margin: 13px;
     font-size: 20px;
 }
+/*
 .board-title, .add-new-card, .toggle-board-button{
     display: inline-block;
-}
+}*/
 
 .board-toggle{
     float: right;
@@ -129,7 +118,7 @@ section.board{
 }
 
 .card-remove{
-    display: block;
+    //display: block;
     position: absolute;
     top: 4px;
     right: 4px;
