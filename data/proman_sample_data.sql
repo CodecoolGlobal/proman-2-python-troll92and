@@ -27,7 +27,8 @@ DROP TABLE IF EXISTS cards;
 
 CREATE TABLE statuses (
     id       SERIAL PRIMARY KEY     NOT NULL,
-    title    VARCHAR(200)           NOT NULL
+    title    VARCHAR(200)           NOT NULL,
+    owner    VARCHAR(200)           NOT NULL
 );
 
 CREATE TABLE boards (
@@ -47,10 +48,10 @@ CREATE TABLE cards (
 --- insert data
 ---
 
-INSERT INTO statuses(title) VALUES ('new');
-INSERT INTO statuses(title) VALUES ('in progress');
-INSERT INTO statuses(title) VALUES ('testing');
-INSERT INTO statuses(title) VALUES ('done');
+INSERT INTO statuses(title, owner) VALUES ('new','global');
+INSERT INTO statuses(title, owner) VALUES ('in progress','global');
+INSERT INTO statuses(title, owner) VALUES ('testing','global');
+INSERT INTO statuses(title, owner) VALUES ('done','global');
 
 INSERT INTO boards(title) VALUES ('Board 1');
 INSERT INTO boards(title) VALUES ('Board 2');

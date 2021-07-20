@@ -81,6 +81,17 @@ def get_max_id_card():
     return last_card[0]['id']
 
 
+def get_max_id_status():
+    last_status = data_manager.execute_select(
+        """
+        SELECT id FROM statuses
+        ORDER BY id DESC
+        LIMIT 1
+        ;
+        """)
+    return last_status[0]['id']
+
+
 def get_max_id_board():
     last_board = data_manager.execute_select(
         """
@@ -103,6 +114,19 @@ def add_new_card(cursor, data):
             board_id=sql.Literal(data[1]),
             status_id=sql.Literal(data[2]),
             card_order=sql.Literal(data[3])
+        )
+    )
+
+
+@data_manager.connection_handler
+def add_new_status(cursor, data):
+    cursor.execute(
+        sql.SQL("""
+        INSERT INTO statuses(title, owner)
+        VALUES ({title},{table})
+        """).format(
+            title=sql.Literal(data[0]),
+            table=sql.Literal(data[1])
         )
     )
 

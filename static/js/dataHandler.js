@@ -22,12 +22,19 @@ export let dataHandler = {
         let response = await apiGet(`/get-cards/${boardId}/${columnId}`)
         return response
     },
-    getLastCardId: async function () {
-        let response = await apiGet(`/get-last-card-id`)
-        return response
-    },
+
     getLastBoardId: async function () {
         let response = await apiGet(`/get-last-board-id`)
+        return response
+    },
+
+    getLastStatusId: async function () {
+        let response = await apiGet(`/get-last-status-id`)
+        return response
+    },
+
+    getLastCardId: async function () {
+        let response = await apiGet(`/get-last-card-id`)
         return response
     },
 
@@ -38,6 +45,12 @@ export let dataHandler = {
     createNewBoard: async function (boardTitle) {
         // creates new card, saves it and calls the callback function with its data
         await apiPost(`/add-new-board/${boardTitle}`)
+    },
+
+    createNewStatus: async function (title, table="global") {
+        // creates new card, saves it and calls the callback function with its data
+        let payload = [title,table];
+        await apiPost(`/add-new-status/${payload}`)
     },
 
     createNewCard: async function (cardTitle, boardId, statusId, cardOrder) {
@@ -62,7 +75,6 @@ async function apiPost(url) {
     await fetch(url, {
         method: 'POST',
     })
-    console.log(url)
 }
 
 async function apiDelete(url) {

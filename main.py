@@ -62,6 +62,12 @@ def get_last_card_id():
     return queires.get_max_id_card()
 
 
+@app.route("/get-last-status-id")
+@json_response
+def get_last_status_id():
+    return queires.get_max_id_status()
+
+
 @app.route("/get-last-board-id")
 @json_response
 def get_last_board():
@@ -72,6 +78,12 @@ def get_last_board():
 @json_response
 def add_new_card(data):
     queires.add_new_card(list(data.split(',')))
+
+
+@app.route("/add-new-status/<data>", methods=["POST"])
+@json_response
+def add_new_status(data):
+    queires.add_new_status(list(data.split(',')))
 
 
 @app.route("/add-new-board/<data>", methods=["POST"])

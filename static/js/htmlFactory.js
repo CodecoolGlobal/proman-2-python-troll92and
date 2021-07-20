@@ -22,6 +22,7 @@ function boardBuilder(board) {
     return `<div class="board-container" board-id="${board.id}">
                 <div class="board-header"><span class="board-title">${board.title}</span>
                     <button class="add-new-card" new-card-id="${board.id}">New card</button>
+                    <button class="add-new-status" new-status-id="${board.id}">New status</button>
                     <button class="toggle-board-button" data-board-id="${board.id}">Show Cards</button>
                 </div>
                 <div class="board-columns">

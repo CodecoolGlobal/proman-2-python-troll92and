@@ -6,9 +6,11 @@ export let columnsManager = {
     loadColumns: async function (boardId) {
         const columns = await dataHandler.getColumns();
         for (let column of columns) {
-            const columnBuilder = htmlFactory(htmlTemplates.column);
-            const content = columnBuilder(column)
-            domManager.addChild(`.board-container[board-id="${boardId}"] .board-columns`, content)
+            if (column.owner === boardId || column.owner === "global"){
+                const columnBuilder = htmlFactory(htmlTemplates.column);
+                const content = columnBuilder(column)
+                domManager.addChild(`.board-container[board-id="${boardId}"] .board-columns`, content)
+            }
         }
     },
 }
