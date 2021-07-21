@@ -12,6 +12,7 @@ export let cardsManager = {
             domManager.addEventListener(`.card-remove[data-card-id="${card.id}"]`, "click", cardsManager.deleteButtonHandler)
         }
         await cardsManager.dragCards()
+        await cardsManager.insertDragged()
 
     },
     deleteButtonHandler: async function(clickEvent) {
@@ -25,12 +26,20 @@ export let cardsManager = {
     dragCards: async function (){
         let dragAbles = document.getElementsByClassName('card')
         for (let dragAble of dragAbles){
-            dragAble.addEventListener('dragstart', () => {
+            await dragAble.addEventListener('dragstart', () => {
                 dragAble.classList.add('dragging')
+                dragAble.setAttribute('prev_over_id','')
+                dragAble.setAttribute('over_id', '')
+                dragAble.setAttribute('over_card', 'false')
+                dragAble.setAttribute('over_content', 'false')
             })
 
-            dragAble.addEventListener('dragend', () => {
+            await dragAble.addEventListener('dragend', () => {
                 dragAble.classList.remove('dragging')
+                dragAble.classList.remove('prev_over_id')
+                dragAble.classList.remove('over_id')
+                dragAble.classList.remove('over_card')
+                dragAble.classList.remove('over_content')
 
                 let parent = dragAble.parentNode
                 let children = parent.childNodes
@@ -48,10 +57,36 @@ export let cardsManager = {
                         card.status_id = parent.parentNode.attributes["data-column-id"].nodeValue
                         card.card_order = order
                         dataHandler.updateCardPosition(card.id, card.board_id, card.status_id, card.card_order)
+                        console.log('update')
                     }
                 }
             })
         }
+
+    },
+    insertDragged: async function(){
+        let cards = document.getElementsByClassName("card")
+            for (let card of cards){
+                card.addEventListener('dragover', e => {
+                    e.preventDefault()
+                    const draggable = document.querySelector('.dragging')
+                    draggable.setAttribute('is_over_card', 'true')
+                    draggable.setAttribute('prev_over_id', draggable.getAttribute('over_id'))
+                    draggable.setAttribute('over_id', card.getAttribute('data-card-id'))
+                    draggable.setAttribute('over_card', 'true')
+
+                    if (draggable.getAttribute('over_id') !== draggable.getAttribute('prev_over_id')){
+                        card.parentNode.insertBefore(draggable, card)
+                    }
+                })
+                card.addEventListener('dragleave',e =>{
+                    const draggable = document.querySelector('.dragging')
+                    draggable.setAttribute('over_card', 'false')
+                })
+            }
+
+    },
+    isOverCard: async function(){
 
     }
 }

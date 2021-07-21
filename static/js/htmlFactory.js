@@ -37,9 +37,7 @@ function columnBuilder(column) {//dataDeleteStatusId, attributeselector
                 <div class="board-column-title">${column.title}
                     <button class="delete-column-button" data-delete-status-id="${column.id}" data-delete-owner-id="${column.owner}">X</button>
                 </div>
-                <div class="board-column-content">
-                
-                </div>
+                <div class="board-column-content"></div>
             </div>`
 }
 

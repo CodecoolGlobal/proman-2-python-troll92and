@@ -29,11 +29,22 @@ export let columnsManager = {
     },
     insertDragged: async function(){
         let column_content_fields = document.getElementsByClassName("board-column-content")
-            for (let column_content_field of column_content_fields){
+            for (let column_content_field of column_content_fields) {
                 column_content_field.addEventListener('dragover', e => {
                     e.preventDefault()
                     const draggable = document.querySelector('.dragging')
-                    column_content_field.appendChild(draggable)
+                    draggable.setAttribute('over_content','true')
+                    if (draggable.getAttribute('over_card') === 'false') {
+                        if (draggable.getAttribute('over_content') === 'true') {
+                            column_content_field.appendChild(draggable)
+                        }
+                    }
+                })
+
+                column_content_field.addEventListener('dragleave', e => {
+                    const draggable = document.querySelector('.dragging')
+                    draggable.setAttribute('over_content', 'false')
+                    draggable.setAttribute('over_card', 'false')
                 })
             }
     },
