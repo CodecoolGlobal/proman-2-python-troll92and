@@ -34,25 +34,6 @@ export let columnsManager = {
                     e.preventDefault()
                     const draggable = document.querySelector('.dragging')
                     column_content_field.appendChild(draggable)
-                    let parent = draggable.parentNode
-                    let children = parent.childNodes
-                    let card = {
-                        id : 0,
-                        board_id : 0,
-                        status_id : 0,
-                        card_order: 0
-                    }
-                    if (children.length > 0){
-                        for (let order = 1; order < children.length; order++){
-                            let child = children[order]
-                            card.id = child.attributes[1].nodeValue
-                            card.board_id = parent.parentNode.parentNode.parentNode.attributes["board-id"].nodeValue
-                            card.status_id = parent.parentNode.attributes["data-column-id"].nodeValue
-                            card.card_order = order
-                            dataHandler.updateCardPosition(card.id, card.board_id, card.status_id, card.card_order)
-                        }
-                    }
-
                 })
             }
     },
