@@ -34,7 +34,9 @@ function boardBuilder(board) {
 
 function columnBuilder(column) {
     return `<div class="board-column" data-column-id="${column.id}">
-                <div class="board-column-title">${column.title}</div>
+                <div class="board-column-title">${column.title}
+                    <button class="delete-column-button" delete-status-id="${column.owner}">X</button>
+                </div>
                 <div class="board-column-content">
                 
                 </div>

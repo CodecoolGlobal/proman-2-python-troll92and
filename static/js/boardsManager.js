@@ -93,7 +93,6 @@ async function addCard(clickEvent) {
 
 async function deleteBoard(clickEvent){
     const boardId = clickEvent.target.attributes['delete-board-id'].nodeValue;
-    console.log('hit')
     await dataHandler.deleteBoardById(boardId)
     let boards = document.getElementsByClassName('board-container');
     for (let board of boards) {
@@ -104,5 +103,6 @@ async function deleteBoard(clickEvent){
         }
     }
 }
+
 
 
