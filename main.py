@@ -113,6 +113,13 @@ def delete_card_by_id(card_id):
     queires.delete_card_by_id(card_id)
 
 
+@app.route("/update-card-by-id/<data>", methods=["POST"])
+@json_response
+def update_card_position(data):
+    data = list(data.split(','))
+    queires.update_card_position(data)
+
+
 def main():
     app.run(debug=True)
 

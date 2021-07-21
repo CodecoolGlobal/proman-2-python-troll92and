@@ -214,4 +214,20 @@ def delete_card_by_id(cursor, card_id):
         """).format(
             card_id=sql.Literal(card_id)
         )
-)
+    )
+
+
+@data_manager.connection_handler
+def update_card_position(cursor, data):
+    cursor.execute(
+        sql.SQL("""
+            UPDATE cards
+            SET (id, board_id, status_id, card_order) = ({id}, {board_id}, {status_id}, {card_order})
+            WHERE id = {id}
+        """).format(
+            id=sql.Literal(data[0]),
+            board_id=sql.Literal(data[1]),
+            status_id=sql.Literal(data[2]),
+            card_order=sql.Literal(data[3])
+        )
+    )
