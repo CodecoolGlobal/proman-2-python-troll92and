@@ -9,13 +9,20 @@ export let cardsManager = {
             const cardBuilder = htmlFactory(htmlTemplates.card);
             const content = cardBuilder(card)
             domManager.addChild(`.board-container[board-id="${boardId}"] .board-columns .board-column[data-column-id="${card.status_id}"] .board-column-content`, content)
-            domManager.addEventListener(`.card[data-card-id="${card.id}"]`, "click", deleteButtonHandler)
+            domManager.addEventListener(`.card-remove[data-card-id="${card.id}"]`, "click", cardsManager.deleteButtonHandler)
         }
     },
+    deleteButtonHandler: async function(clickEvent) {
+        const cardId = clickEvent.target.attributes['data-card-id'].nodeValue;
+        let item = document.querySelector(`.card[data-card-id="${cardId}"]`)
+        let parent = item.parentNode
+
+        parent.removeChild(item)
+        await dataHandler.deleteCardById(cardId)
+    }
 }
 
-function deleteButtonHandler(clickEvent) {
-}
+
 
 async function cardOrder(boardId, columnId){
     const cards = await dataHandler.getCardOrderByBoardColumnId(boardId,columnId);

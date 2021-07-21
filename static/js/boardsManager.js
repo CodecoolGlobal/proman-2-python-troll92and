@@ -66,13 +66,18 @@ async function addStatus(clickEvent) {
     let status = {
         id : 0,
         title : "New Status",
-        board_id : boardId
+        owner : boardId
     }
-    await dataHandler.createNewStatus(status.title, status.board_id )
+    await dataHandler.createNewStatus(status.title, status.owner )
     status.id = await dataHandler.getLastStatusId()
     const columnBuilder = htmlFactory(htmlTemplates.column);
     let column = columnBuilder(status)
     domManager.addChild(`.board-container[board-id="${boardId}"] .board-columns`, column);
+    domManager.addEventListener(`.delete-column-button[data-delete-status-id="${status.id}"], .delete-column-button[data-delete-owner-id="${status.owner}"]`, "click", columnsManager.deleteStatus)
+    let delete_buttons = document.querySelectorAll(`.delete-column-button[data-delete-status-id="${status.id}"], .delete-column-button[data-delete-owner-id="${status.owner}"]`)
+        for (let delete_button of delete_buttons){
+                delete_button.addEventListener("click", columnsManager.deleteStatus)
+        }
 }
 
 
@@ -86,8 +91,10 @@ async function addCard(clickEvent) {
     await dataHandler.createNewCard(card.title, boardId, '1', card.card_order)
     card.id = await dataHandler.getLastCardId()
     const cardBuilder = htmlFactory(htmlTemplates.card);
-    card = cardBuilder(card)
-    domManager.addChild(`.board-container[board-id="${boardId}"] .board-columns .board-column[data-column-id="1"] .board-column-content`, card);
+    let content = cardBuilder(card)
+    await domManager.addChild(`.board-container[board-id="${boardId}"] .board-columns .board-column[data-column-id="1"] .board-column-content`, content);
+    await domManager.addEventListener(`.card-remove[data-card-id="${card.id}"]`, "click", cardsManager.deleteButtonHandler)
+
 }
 
 

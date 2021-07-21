@@ -65,6 +65,10 @@ export let dataHandler = {
 
     deleteStatusById: async function(boardId, statusId){
         await apiPost(`/delete-status-by-id/${boardId}/${statusId}`)
+    },
+
+    deleteCardById: async function(card_id){
+        await apiPost(`/delete-card-by-id/${card_id}`)
     }
 
 };

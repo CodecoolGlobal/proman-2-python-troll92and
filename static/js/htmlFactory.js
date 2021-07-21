@@ -32,10 +32,10 @@ function boardBuilder(board) {
             </div>`;
 }
 
-function columnBuilder(column) {
+function columnBuilder(column) {//dataDeleteStatusId, attributeselector
     return `<div class="board-column" data-column-id="${column.id}">
                 <div class="board-column-title">${column.title}
-                    <button class="delete-column-button" delete-status-id="${column.owner}">X</button>
+                    <button class="delete-column-button" data-delete-status-id="${column.id}" data-delete-owner-id="${column.owner}">X</button>
                 </div>
                 <div class="board-column-content">
                 
@@ -44,6 +44,6 @@ function columnBuilder(column) {
 }
 
 function cardBuilder(card) {
-    return `<div class="card" data-card-id="${card.id}">${card.title}<div class="card-remove">X</div></div>`;
+    return `<div class="card" data-card-id="${card.id}">${card.title}<div class="card-remove" data-card-id="${card.id}">X</div></div>`;
 }
 

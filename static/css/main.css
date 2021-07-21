@@ -31,7 +31,7 @@ span{
     text-align: center;
 }
 
-.add-new-card, .add-new-status, .add-board-button{
+.add-new-card, .add-new-status, .add-board-button, .delete-board-button, .delete-column-button{
     background: #222;
     color: #fff;
     font-size: 14px;
