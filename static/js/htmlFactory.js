@@ -44,6 +44,6 @@ function columnBuilder(column) {//dataDeleteStatusId, attributeselector
 }
 
 function cardBuilder(card) {
-    return `<div class="card" data-card-id="${card.id}">${card.title}<div class="card-remove" data-card-id="${card.id}">X</div></div>`;
+    return `<div class="card" data-card-id="${card.id}" draggable="true">${card.title}<div class="card-remove" data-card-id="${card.id}">X</div></div>`;
 }
 
