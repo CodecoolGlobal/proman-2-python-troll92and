@@ -48,7 +48,4 @@ export let columnsManager = {
                 })
             }
     },
-    saveDragDrop: async function(){
-
-    }
 }

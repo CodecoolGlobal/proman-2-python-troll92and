@@ -49,7 +49,15 @@ export let cardsManager = {
                     status_id : 0,
                     card_order: 0
                 }
-                if (children.length > 0){
+                if (children.length === 1){
+                    let child = children[0]
+                    card.id = child.attributes[1].nodeValue
+                    card.board_id = parent.parentNode.parentNode.parentNode.attributes["board-id"].nodeValue
+                    card.status_id = parent.parentNode.attributes["data-column-id"].nodeValue
+                    card.card_order = 1
+                    dataHandler.updateCardPosition(card.id, card.board_id, card.status_id, card.card_order)
+                    console.log('update')
+                }else if (children.length > 0){
                     for (let order = 1; order < children.length; order++){
                         let child = children[order]
                         card.id = child.attributes[1].nodeValue
@@ -86,15 +94,4 @@ export let cardsManager = {
             }
 
     },
-    isOverCard: async function(){
-
-    }
 }
-
-
-
-async function cardOrder(boardId, columnId){
-    const cards = await dataHandler.getCardOrderByBoardColumnId(boardId,columnId);
-
-}
-
