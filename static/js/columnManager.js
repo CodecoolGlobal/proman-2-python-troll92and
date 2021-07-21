@@ -17,8 +17,8 @@ export let columnsManager = {
                 delete_button.addEventListener("click", columnsManager.deleteStatus)
             }
         }
+        await columnsManager.insertDragged()
     },
-
     deleteStatus: async function(clickEvent) {
         const statusId = clickEvent.target.attributes['data-delete-status-id'].nodeValue;
         const ownerId = clickEvent.target.attributes['data-delete-owner-id'].nodeValue;
@@ -30,4 +30,18 @@ export let columnsManager = {
         await dataHandler.deleteStatusById(ownerId, statusId)
         console.log("done")
     },
+    insertDragged: async function(){
+        let column_content_fields = document.getElementsByClassName("board-column-content")
+            for (let column_content_field of column_content_fields){
+                column_content_field.addEventListener('dragover', e => {
+                    e.preventDefault()
+                    const draggable = document.querySelector('.dragging')
+                    column_content_field.appendChild(draggable)
+                    //draggable.parentNode.childNodes()
+                })
+            }
+    },
+    saveDragDrop: async function(){
+
+    }
 }
