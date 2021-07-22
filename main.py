@@ -1,11 +1,15 @@
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, session, redirect
 from util import json_response
+
+import os
 
 import queires
 
 import mimetypes
+
 mimetypes.add_type('application/javascript', '.js')
 app = Flask(__name__)
+app.secret_key=os.environ.get("SECRET_KEY")
 
 
 @app.route("/")
@@ -13,16 +17,60 @@ def index():
     """
     This is a one-pager which shows all the boards and cards
     """
-    return render_template('index.html')
+    return render_template('index.html', logged=False)
+
+
+@app.route("/registration", methods=["GET", "POST"])
+def registration():
+    if request.method == "GET":
+        if "username" in session:
+            return redirect(url_for("index"))
+    elif request.method == "POST":
+        new_user_data = dict(request.form)
+        new_username = new_user_data["username"]
+        new_password = new_user_data["password"]
+        new_password_confirmation = new_user_data["password-confirm"]
+        if (new_password != new_password_confirmation) or (queires.get_user_data_by_name(new_username)):
+            return render_template("registration.html", invalid=True)
+        else:
+            queires.register_new_user(new_user_data)
+            return render_template("index.html", succesful=True)
+    return render_template("registration.html")
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "GET":
+        if "username" in session:
+            return redirect(url_for("index"))
+    elif request.method == "POST":
+        login_datas = dict(request.form)
+        if queires.valid_login(login_datas):
+            username = login_datas["username"]
+            session["username"] = username
+            user_data = queires.get_user_data_by_name(username)
+            session["user_id"] = user_data.get("id")
+            return redirect(url_for("index"))
+        else:
+            return render_template("login.html", invalid=True)
+    return render_template("login.html")
+
+
+@app.route("/logout")
+def logout():
+    session.pop("username", None)
+    session.pop("user_id", None)
+    return redirect(url_for("index"))
 
 
 @app.route("/get-boards")
 @json_response
 def get_boards():
-    """
-    All the boards
-    """
-    return queires.get_boards()
+    if "username" in session:
+        return queires.get_boards(session['username'])
+    else:
+        return queires.get_boards()
+
 
 
 @app.route("/get-columns")
@@ -89,7 +137,12 @@ def add_new_status(data):
 @app.route("/add-new-board/<data>", methods=["POST"])
 @json_response
 def add_new_board(data):
-    queires.add_new_board(data)
+    if "username" in session:
+        data = [data, session['username']]
+        queires.add_new_board(data)
+    else:
+        data = [data, "public"]
+        queires.add_new_board(data)
 
 
 @app.route("/delete-board-by-id/<int:board_id>", methods=["POST"])

@@ -17,6 +17,14 @@
     <body>
 
         <h1>ProMan</h1>
+        <div class="navbar-options">
+            {% if "username" in session %}
+            <li><a href="{{ url_for("logout") }}">logout</a></li>
+            {% else %}
+            <li><a href="{{ url_for("login") }}">login</a></li>
+            <li><a href={{ url_for("registration") }}>register</a></li>
+            {% endif %}
+        </div>
         <button class="add-board-button">Add new board</button>
         <div id="root"></div>
     </body>
