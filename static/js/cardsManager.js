@@ -11,8 +11,10 @@ export let cardsManager = {
             domManager.addChild(`.board-container[board-id="${boardId}"] .board-columns .board-column[data-column-id="${card.status_id}"] .board-column-content`, content)
             domManager.addEventListener(`.card-remove[data-card-id="${card.id}"]`, "click", cardsManager.deleteButtonHandler)
         }
-        await cardsManager.dragCards()
-        await cardsManager.insertDragged()
+        let dragAbles = document.getElementsByClassName('card')
+        await cardsManager.dragCards(dragAbles)
+        let all_cards = document.getElementsByClassName("card")
+        await cardsManager.insertDragged(all_cards)
 
     },
     deleteButtonHandler: async function(clickEvent) {
@@ -23,8 +25,7 @@ export let cardsManager = {
         parent.removeChild(item)
         await dataHandler.deleteCardById(cardId)
     },
-    dragCards: async function (){
-        let dragAbles = document.getElementsByClassName('card')
+    dragCards: async function (dragAbles){
         for (let dragAble of dragAbles){
             await dragAble.addEventListener('dragstart', () => {
                 dragAble.classList.add('dragging')
@@ -56,7 +57,6 @@ export let cardsManager = {
                     card.status_id = parent.parentNode.attributes["data-column-id"].nodeValue
                     card.card_order = 1
                     dataHandler.updateCardPosition(card.id, card.board_id, card.status_id, card.card_order)
-                    console.log('update')
                 }else if (children.length > 0){
                     for (let order = 1; order < children.length; order++){
                         let child = children[order]
@@ -65,33 +65,30 @@ export let cardsManager = {
                         card.status_id = parent.parentNode.attributes["data-column-id"].nodeValue
                         card.card_order = order
                         dataHandler.updateCardPosition(card.id, card.board_id, card.status_id, card.card_order)
-                        console.log('update')
                     }
                 }
             })
         }
 
     },
-    insertDragged: async function(){
-        let cards = document.getElementsByClassName("card")
-            for (let card of cards){
-                card.addEventListener('dragover', e => {
-                    e.preventDefault()
-                    const draggable = document.querySelector('.dragging')
-                    draggable.setAttribute('is_over_card', 'true')
-                    draggable.setAttribute('prev_over_id', draggable.getAttribute('over_id'))
-                    draggable.setAttribute('over_id', card.getAttribute('data-card-id'))
-                    draggable.setAttribute('over_card', 'true')
+    insertDragged: async function(cards){
+        for (let card of cards){
+            card.addEventListener('dragover', e => {
+                e.preventDefault()
+                const draggable = document.querySelector('.dragging')
+                draggable.setAttribute('is_over_card', 'true')
+                draggable.setAttribute('prev_over_id', draggable.getAttribute('over_id'))
+                draggable.setAttribute('over_id', card.getAttribute('data-card-id'))
+                draggable.setAttribute('over_card', 'true')
 
-                    if (draggable.getAttribute('over_id') !== draggable.getAttribute('prev_over_id')){
-                        card.parentNode.insertBefore(draggable, card)
-                    }
-                })
-                card.addEventListener('dragleave',e =>{
-                    const draggable = document.querySelector('.dragging')
-                    draggable.setAttribute('over_card', 'false')
-                })
-            }
-
+                if (draggable.getAttribute('over_id') !== draggable.getAttribute('prev_over_id')){
+                    card.parentNode.insertBefore(draggable, card)
+                }
+            })
+            card.addEventListener('dragleave',e =>{
+                const draggable = document.querySelector('.dragging')
+                draggable.setAttribute('over_card', 'false')
+            })
+        }
     },
 }

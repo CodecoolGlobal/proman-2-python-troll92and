@@ -14,10 +14,15 @@ export let columnsManager = {
             }
             let delete_buttons = document.querySelectorAll(`.delete-column-button[data-delete-status-id="${column.id}"], .delete-column-button[data-delete-owner-id="${column.owner}"]`)
             for (let delete_button of delete_buttons){
-                delete_button.addEventListener("click", columnsManager.deleteStatus)
+                if (delete_button.getAttribute('data-delete-owner-id') === 'global'){
+                    delete_button.parentNode.removeChild(delete_button)
+                }else{
+                    delete_button.addEventListener("click", columnsManager.deleteStatus)
+                }
             }
         }
-        await columnsManager.insertDragged()
+        let column_content_fields = document.getElementsByClassName("board-column-content")
+        await columnsManager.insertDragged(column_content_fields)
     },
     deleteStatus: async function(clickEvent) {
         const statusId = clickEvent.target.attributes['data-delete-status-id'].nodeValue;
@@ -27,25 +32,24 @@ export let columnsManager = {
         parent.removeChild(item)
         await dataHandler.deleteStatusById(ownerId, statusId)
     },
-    insertDragged: async function(){
-        let column_content_fields = document.getElementsByClassName("board-column-content")
-            for (let column_content_field of column_content_fields) {
-                column_content_field.addEventListener('dragover', e => {
-                    e.preventDefault()
-                    const draggable = document.querySelector('.dragging')
-                    draggable.setAttribute('over_content','true')
-                    if (draggable.getAttribute('over_card') === 'false') {
-                        if (draggable.getAttribute('over_content') === 'true') {
-                            column_content_field.appendChild(draggable)
-                        }
+    insertDragged: async function(column_content_fields){
+        for (let column_content_field of column_content_fields) {
+            column_content_field.addEventListener('dragover', e => {
+                e.preventDefault()
+                const draggable = document.querySelector('.dragging')
+                draggable.setAttribute('over_content','true')
+                if (draggable.getAttribute('over_card') === 'false') {
+                    if (draggable.getAttribute('over_content') === 'true') {
+                        column_content_field.appendChild(draggable)
                     }
-                })
+                }
+            })
 
-                column_content_field.addEventListener('dragleave', e => {
-                    const draggable = document.querySelector('.dragging')
-                    draggable.setAttribute('over_content', 'false')
-                    draggable.setAttribute('over_card', 'false')
-                })
-            }
+            column_content_field.addEventListener('dragleave', e => {
+                const draggable = document.querySelector('.dragging')
+                draggable.setAttribute('over_content', 'false')
+                draggable.setAttribute('over_card', 'false')
+            })
+        }
     },
 }

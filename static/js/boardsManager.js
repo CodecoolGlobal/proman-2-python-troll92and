@@ -78,7 +78,10 @@ async function addStatus(clickEvent) {
     for (let delete_button of delete_buttons){
            delete_button.addEventListener("click", columnsManager.deleteStatus)
     }
-    await columnsManager.insertDragged()
+    let parentOfTarget = document.querySelector(`.board-column[data-column-id="${status.id}"]`)
+    let target = parentOfTarget.children[1]
+    console.log(target)
+    await columnsManager.insertDragged([target])
 }
 
 
@@ -95,8 +98,11 @@ async function addCard(clickEvent) {
     let content = cardBuilder(card)
     await domManager.addChild(`.board-container[board-id="${boardId}"] .board-columns .board-column[data-column-id="1"] .board-column-content`, content);
     await domManager.addEventListener(`.card-remove[data-card-id="${card.id}"]`, "click", cardsManager.deleteButtonHandler)
-    await cardsManager.dragCards()
-    await cardsManager.insertDragged()
+
+    let target = document.querySelector(`.card[data-card-id="${card.id}"]`)
+    await cardsManager.dragCards([target])
+    await cardsManager.insertDragged([target])
+
 }
 
 
@@ -112,6 +118,3 @@ async function deleteBoard(clickEvent){
         }
     }
 }
-
-
-
