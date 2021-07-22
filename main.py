@@ -35,7 +35,6 @@ def registration():
         else:
             queires.register_new_user(new_user_data)
             return render_template("index.html", succesful=True)
-    print("béla")
     return render_template("registration.html")
 
 
@@ -67,10 +66,11 @@ def logout():
 @app.route("/get-boards")
 @json_response
 def get_boards():
-    """
-    All the boards
-    """
-    return queires.get_boards()
+    if "username" in session:
+        return queires.get_boards(session['username'])
+    else:
+        return queires.get_boards()
+
 
 
 @app.route("/get-columns")
@@ -137,7 +137,12 @@ def add_new_status(data):
 @app.route("/add-new-board/<data>", methods=["POST"])
 @json_response
 def add_new_board(data):
-    queires.add_new_board(data)
+    if "username" in session:
+        data = [data, session['username']]
+        queires.add_new_board(data)
+    else:
+        data = [data, "public"]
+        queires.add_new_board(data)
 
 
 @app.route("/delete-board-by-id/<int:board_id>", methods=["POST"])

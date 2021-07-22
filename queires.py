@@ -79,16 +79,19 @@ def get_all_columns():
     return columns
 
 
-def get_boards():
+def get_boards(username="public"):
     """
     Gather all boards
     :return:
     """
     return data_manager.execute_select(
         """
-        SELECT * FROM boards
+        SELECT * 
+        FROM boards
+        WHERE owner= 'public' OR owner = %(username)s
         ;
         """
+        , {"username": username}
     )
 
 
@@ -183,10 +186,11 @@ def add_new_status(cursor, data):
 def add_new_board(cursor, data):
     cursor.execute(
         sql.SQL("""
-        INSERT INTO boards(title)
-        VALUES ({title})
+        INSERT INTO boards(title, owner)
+        VALUES ({title}, {owner})
         """).format(
-            title=sql.Literal(data)
+            title=sql.Literal(data[0]),
+            owner=sql.Literal(data[1])
         )
     )
 
