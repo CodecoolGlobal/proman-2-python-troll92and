@@ -113,6 +113,31 @@ def delete_card_by_id(card_id):
     queires.delete_card_by_id(card_id)
 
 
+@app.route("/update-card-by-id/<data>", methods=["POST"])
+@json_response
+def update_card_position(data):
+    data = list(data.split(','))
+    queires.update_card_position(data)
+
+
+@app.route("/rename-board-by-id/<int:board_id>/<string:board_title>", methods=["POST"])
+@json_response
+def rename_board_by_id(board_id, board_title):
+    queires.rename_board_by_id(board_id, board_title)
+
+
+@app.route("/rename-column-by-id/<int:column_id>/<string:column_title>", methods=["POST"])
+@json_response
+def rename_column_by_id(column_id, column_title):
+    queires.rename_column_by_id(column_id, column_title)
+
+
+@app.route("/rename-card-by-id/<int:card_id>/<string:card_title>", methods=["POST"])
+@json_response
+def rename_card_by_id(card_id, card_title):
+    queires.rename_card_by_id(card_id, card_title)
+
+
 def main():
     app.run(debug=True)
 

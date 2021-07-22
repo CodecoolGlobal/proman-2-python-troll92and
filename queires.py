@@ -50,6 +50,7 @@ def get_cards_for_board(board_id):
         """
         SELECT * FROM cards
         WHERE cards.board_id = %(board_id)s
+        ORDER BY cards.board_id DESC, cards.status_id DESC , cards.card_order DESC 
         ;
         """
         , {"board_id": board_id})
@@ -214,4 +215,64 @@ def delete_card_by_id(cursor, card_id):
         """).format(
             card_id=sql.Literal(card_id)
         )
-)
+    )
+
+
+@data_manager.connection_handler
+def update_card_position(cursor, data):
+    cursor.execute(
+        sql.SQL("""
+            UPDATE cards
+            SET (id, board_id, status_id, card_order) = ({id}, {board_id}, {status_id}, {card_order})
+            WHERE id = {id}
+        """).format(
+            id=sql.Literal(data[0]),
+            board_id=sql.Literal(data[1]),
+            status_id=sql.Literal(data[2]),
+            card_order=sql.Literal(data[3])
+        )
+    )
+
+
+@data_manager.connection_handler
+def rename_board_by_id(cursor, board_id, board_title):
+    cursor.execute(
+        sql.SQL("""
+            UPDATE boards
+            SET title = {board_title}
+            WHERE id = {board_id}
+        """).format(
+            board_id=sql.Literal(board_id),
+            board_title=sql.Literal(board_title)
+        )
+    )
+
+
+@data_manager.connection_handler
+def rename_card_by_id(cursor, card_id, card_title):
+    cursor.execute(
+        sql.SQL("""
+            UPDATE cards
+            SET title = {card_title}
+            WHERE id = {card_id}
+        """).format(
+            card_id=sql.Literal(card_id),
+            card_title=sql.Literal(card_title)
+        )
+    )
+
+
+@data_manager.connection_handler
+def rename_column_by_id(cursor, column_id, column_title):
+    cursor.execute(
+        sql.SQL("""
+            UPDATE statuses
+            SET title = {column_title}
+            WHERE id = {column_id}
+        """).format(
+            column_id=sql.Literal(column_id),
+            column_title=sql.Literal(column_title)
+        )
+    )
+
+

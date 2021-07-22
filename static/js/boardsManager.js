@@ -19,9 +19,32 @@ export let boardsManager = {
             domManager.addEventListener(`.add-new-status[new-status-id="${board.id}"]`, "click", addStatus)
             domManager.addEventListener(`.delete-board-button[delete-board-id="${board.id}"]`, "click", deleteBoard)
             domManager.addEventListener(`.toggle-board-button[data-board-id="${board.id}"]`, "click", showHideButtonHandler)
+            domManager.addEventListener(`.board-title[title-id="${board.id}"]`, "click", changeBoardTitle)
         }
 
-    },
+    },/*
+    orderCards: async function(){
+        let cards_parents = document.querySelectorAll('.board-column-content')
+        for (let cards_parent of cards_parents){
+            let children = cards_parent.children
+            let cards = []
+            let i = 0
+            for (let child of children){
+                cards.splice(i,0,child)
+            }
+            cards.sort(function(card, card2){return card.getAttribute('data-card-order')-card2.getAttribute('data-card-order')})
+            console.log(cards)
+            for (let card of cards){
+                console.log(cards_parent)
+                cards_parent.removeChild(card)
+            }
+            for (let card of cards){
+                domManager.addChild(cards_parent,card)
+
+            console.log(card)
+            }
+        }
+    }*/
 }
 
 async function showHideButtonHandler(clickEvent) {
@@ -40,6 +63,7 @@ async function showHideButtonHandler(clickEvent) {
         current_board.getElementsByClassName('toggle-board-button')[0].innerText = "Hide Cards";
         await columnsManager.loadColumns(boardId);
         await cardsManager.loadCards(boardId)
+        //await boardsManager.orderCards()
     }
 }
 
@@ -58,6 +82,7 @@ async function addBoard(){
     domManager.addEventListener(`.add-new-status[new-status-id="${board.id}"]`, "click", addStatus)
     domManager.addEventListener(`.toggle-board-button[data-board-id="${board.id}"]`, "click", showHideButtonHandler)
     domManager.addEventListener(`.delete-board-button[delete-board-id="${board.id}"]`, "click", deleteBoard)
+    domManager.addEventListener(`.board-title[title-id="${board.id}"]`, "click", changeBoardTitle)
 }
 
 
@@ -73,11 +98,16 @@ async function addStatus(clickEvent) {
     const columnBuilder = htmlFactory(htmlTemplates.column);
     let column = columnBuilder(status)
     domManager.addChild(`.board-container[board-id="${boardId}"] .board-columns`, column);
+    domManager.addEventListener(`.board-column-title[column-title-id='${status.id}']`, "click", columnsManager.changeColumnTitle)
     domManager.addEventListener(`.delete-column-button[data-delete-status-id="${status.id}"], .delete-column-button[data-delete-owner-id="${status.owner}"]`, "click", columnsManager.deleteStatus)
     let delete_buttons = document.querySelectorAll(`.delete-column-button[data-delete-status-id="${status.id}"], .delete-column-button[data-delete-owner-id="${status.owner}"]`)
-        for (let delete_button of delete_buttons){
-                delete_button.addEventListener("click", columnsManager.deleteStatus)
-        }
+    for (let delete_button of delete_buttons){
+           delete_button.addEventListener("click", columnsManager.deleteStatus)
+    }
+    let parentOfTarget = document.querySelector(`.board-column[data-column-id="${status.id}"]`)
+    let target = parentOfTarget.children[1]
+    console.log(target)
+    await columnsManager.insertDragged([target])
 }
 
 
@@ -93,7 +123,12 @@ async function addCard(clickEvent) {
     const cardBuilder = htmlFactory(htmlTemplates.card);
     let content = cardBuilder(card)
     await domManager.addChild(`.board-container[board-id="${boardId}"] .board-columns .board-column[data-column-id="1"] .board-column-content`, content);
+    await domManager.addEventListener(`.card-title[card-title-id="${card.id}"]`, "click", cardsManager.changeCardTitle)
     await domManager.addEventListener(`.card-remove[data-card-id="${card.id}"]`, "click", cardsManager.deleteButtonHandler)
+
+    let target = document.querySelector(`.card[data-card-id="${card.id}"]`)
+    await cardsManager.dragCards([target])
+    await cardsManager.insertDragged([target])
 
 }
 
@@ -112,4 +147,18 @@ async function deleteBoard(clickEvent){
 }
 
 
-
+function changeBoardTitle(clickEvent) {
+    const boardId = clickEvent.target.attributes['title-id'].nodeValue;
+    let element = document.querySelector(`.board-title[title-id='${boardId}']`)
+    let oldText = element.innerText
+    element.addEventListener('focusout', async () =>{
+        let title = element.innerText
+        if(title === ""){
+            element.innerText = "unnamed"
+            await dataHandler.renameBoard(boardId, "unnamed")
+        }
+        else if(title !== oldText){
+            await dataHandler.renameBoard(boardId, title)
+        }
+    })
+}
