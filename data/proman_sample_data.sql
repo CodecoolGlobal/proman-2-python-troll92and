@@ -20,6 +20,7 @@ SET default_with_oids = false;
 DROP TABLE IF EXISTS statuses CASCADE;
 DROP TABLE IF EXISTS boards CASCADE;
 DROP TABLE IF EXISTS cards;
+DROP TABLE IF EXISTS users;
 
 ---
 --- create tables
@@ -33,7 +34,8 @@ CREATE TABLE statuses (
 
 CREATE TABLE boards (
     id          SERIAL PRIMARY KEY  NOT NULL,
-    title       VARCHAR(200)        NOT NULL
+    title       VARCHAR(200)        NOT NULL,
+    owner       VARCHAR(200)        NOT NULL
 );
 
 CREATE TABLE cards (
@@ -42,6 +44,14 @@ CREATE TABLE cards (
     status_id   INTEGER             NOT NULL,
     title       VARCHAR (200)       NOT NULL,
     card_order  INTEGER             NOT NULL
+);
+
+CREATE TABLE users(
+    id          SERIAL PRIMARY KEY NOT NULL ,
+    username    varchar (200)      NOT NULL ,
+    password    varchar (200)      NOT NULL ,
+    board_id    INTEGER,
+    FOREIGN KEY (board_id) REFERENCES boards(id)
 );
 
 ---
@@ -53,8 +63,8 @@ INSERT INTO statuses(title, owner) VALUES ('in progress','global');
 INSERT INTO statuses(title, owner) VALUES ('testing','global');
 INSERT INTO statuses(title, owner) VALUES ('done','global');
 
-INSERT INTO boards(title) VALUES ('Board 1');
-INSERT INTO boards(title) VALUES ('Board 2');
+INSERT INTO boards(title, owner) VALUES ('Board 1', 'public');
+INSERT INTO boards(title, owner) VALUES ('Board 2', 'public');
 
 INSERT INTO cards VALUES (nextval('cards_id_seq'), 1, 1, 'new card 1', 1);
 INSERT INTO cards VALUES (nextval('cards_id_seq'), 1, 1, 'new card 2', 2);
@@ -69,6 +79,8 @@ INSERT INTO cards VALUES (nextval('cards_id_seq'), 2, 3, 'planning', 1);
 INSERT INTO cards VALUES (nextval('cards_id_seq'), 2, 4, 'done card 1', 1);
 INSERT INTO cards VALUES (nextval('cards_id_seq'), 2, 4, 'done card 1', 2);
 
+
+INSERT INTO users(username, password) VALUES('rolika', 'csovesvohok');
 ---
 --- add constraints
 ---

@@ -3,6 +3,29 @@ from psycopg2 import sql
 import data_manager
 
 
+@data_manager.connection_handler
+def get_user_data_by_name(cursor, username):
+    cursor.execute(
+        sql.SQL("""
+            SELECT *
+            FROM users
+            WHERE username = {username}
+        """).format(
+            username=sql.Literal(username)
+        )
+    )
+
+
+@data_manager.connection_handler
+def register_new_user(cursor, username, password):
+    cursor.execute("""
+        INSERT INTO users (username, password, board_id)
+        VALUES ({username}, {password})
+    """).format(username=sql.Literal(username),
+                password=sql.Literal(password)
+     )
+
+
 def get_card_status(status_id):
     """
     Find the first status matching the given id

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, session, redirect
 from util import json_response
 
 import queires
@@ -14,6 +14,24 @@ def index():
     This is a one-pager which shows all the boards and cards
     """
     return render_template('index.html')
+
+
+@app.route("/registration", methods=["GET", "POST"])
+def registration():
+    if request.method == "GET":
+        if "username" in session:
+            return redirect(url_for("index"))
+    elif request.method == "POST":
+        new_user_data = dict(request.form)
+        new_username = new_user_data["username"]
+        new_password = new_user_data["password"]
+        new_password_confirmation = new_user_data["password-confirm"]
+        if (new_password != new_password_confirmation) or (queires.get_user_data_by_name(new_username)):
+            return render_template("registration.html", invalid=True)
+        else:
+            queires.register_new_user(new_username, new_password)
+            return render_template("registration.html", invalid=False)
+    return render_template("registration.html")
 
 
 @app.route("/get-boards")
