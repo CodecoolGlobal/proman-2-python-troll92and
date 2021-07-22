@@ -2,23 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>ProMan</title>
+
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon/favicon.ico') }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon/favicon-32x32.png') }}">
+        <link rel="icon" type="image/png" sizes="96x96" href="{{ url_for('static', filename='favicon/favicon-96x96.png') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon/favicon-16x16.png') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body>
-    <h1>Login page</h1>
+    <h1>Registration page</h1>
     {% if invalid %}
-        <p>
             Invalid registration attempt
-        </p>
     {% elif succesful %}
         <p>
             Succesful registration!
             Now you can log in.
         </p>
     {% endif %}
-    <p>
-            <li><a href="{{ url_for("index") }}"></a></li>
-    </p>
+    <a href="{{ url_for("index") }}"><button type="button">back to main</button></a>
     <form action="{{ url_for("registration") }}" method="post">
         <p>
             <label for="username">Username:</label>
@@ -26,11 +28,15 @@
         </p>
         <p>
             <label for="password">Password:</label>
-            <input id="password" name="password" >
+            <input id="password" name="password" type="password" required>
         </p>
         <p>
             <label for="password-confirm">Confirm password:</label>
-            <input id="password-confirm" name="password-confirm">
+            <input id="password-confirm" name="password-confirm" type="password" required>
+        </p>
+        <p>
+            <label for="email">Email:</label>
+            <input id="email" name="email">
         </p>
         <button type="submit">Submit</button>
     </form>
