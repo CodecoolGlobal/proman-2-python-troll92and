@@ -38,6 +38,11 @@ export let dataHandler = {
         return response
     },
 
+    getArchivedCards: async function (boardId) {
+        let response = await apiGet(`/get-archived-cards/${boardId}`)
+        return response
+    },
+
     getCard: async function (cardId) {
         // the card is retrieved and then the callback function is called with the card
     },

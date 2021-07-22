@@ -99,7 +99,7 @@ def get_cards_for_board(board_id):
     matching_cards = data_manager.execute_select(
         """
         SELECT * FROM cards
-        WHERE cards.board_id = %(board_id)s
+        WHERE cards.board_id = %(board_id)s and cards.archived = false
         ORDER BY cards.board_id ASC, cards.status_id ASC, cards.card_order ASC
         ;
         """
@@ -152,6 +152,16 @@ def get_max_id_board():
         ;
         """)
     return last_board[0]['id']
+
+
+def get_archived_cards(board_id):
+    return data_manager.execute_select(
+        """
+        SELECT * FROM cards
+        WHERE cards.board_id = %(board_id)s and cards.archived = true
+        ;
+        """
+        , {"board_id": board_id})
 
 
 @data_manager.connection_handler

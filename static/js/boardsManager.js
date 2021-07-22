@@ -19,10 +19,45 @@ export let boardsManager = {
             domManager.addEventListener(`.add-new-status[new-status-id="${board.id}"]`, "click", addStatus)
             domManager.addEventListener(`.delete-board-button[delete-board-id="${board.id}"]`, "click", deleteBoard)
             domManager.addEventListener(`.toggle-board-button[data-board-id="${board.id}"]`, "click", showHideButtonHandler)
+            domManager.addEventListener(`.toggle-archive-button[data-board-archive-id="${board.id}"]`, "click", boardsManager.archiveButtonHandler)
             domManager.addEventListener(`.board-title[title-id="${board.id}"]`, "click", changeBoardTitle)
         }
-
     },
+    archiveButtonHandler: async function(clickEvent){
+        const boardId = clickEvent.target.attributes['data-board-archive-id'].nodeValue
+        let current_archive = document.querySelector(`.archive[archive-board-id="${boardId}"]`);
+        if (current_archive === null ){
+            let current_board = document.querySelector(`.board-container[board-id="${boardId}"]`)
+            current_board.getElementsByClassName('toggle-archive-button')[0].innerHTML = "Hide archive"
+            await boardsManager.archiveLoad(boardId)
+        }else{
+            let parent = current_archive.parentNode
+            parent.removeChild(current_archive)
+            let current_board = document.querySelector(`.board-container[board-id="${boardId}"]`)
+            current_board.getElementsByClassName('toggle-archive-button')[0].innerHTML = "Show archive"
+
+        }
+    },
+    archiveLoad: async function(boardId){
+        const archiveBuilder = htmlFactory(htmlTemplates.archive);
+        const content = await archiveBuilder(boardId)
+        await domManager.addChild(`.board-container[board-id="${boardId}"] .board-columns`, content)
+        let cards = await dataHandler.getArchivedCards(boardId)
+        if (cards.length>0){
+            for (let card of cards){
+                const cardBuilder = htmlFactory(htmlTemplates.card);
+                const card_content = await cardBuilder(card)
+                domManager.addChild(` .archive-content[archive-owner-id="${boardId}"`, card_content)
+                let added_card = document.querySelector(`.card-title[card-title-id="${card.id}"]`)
+                added_card.parentNode.setAttribute("draggable",false)
+                console.log(added_card.parentNode)
+                domManager.addEventListener(`.card-title[card-title-id="${card.id}"]`, "click", cardsManager.changeCardTitle)
+                domManager.addEventListener(`.card-remove[data-card-id="${card.id}"]`, "click", cardsManager.deleteButtonHandler)
+            }
+        }
+
+
+    }
 
 }
 
