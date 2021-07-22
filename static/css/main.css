@@ -31,6 +31,12 @@ span{
     text-align: center;
 }
 
+.add-board-button{
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .add-new-card, .add-new-status, .add-board-button, .delete-board-button, .delete-column-button{
     background: #222;
     color: #fff;
@@ -53,6 +59,8 @@ span{
     max-width: 960px;
     background: white;
     margin-bottom:20px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 section.board{

@@ -75,9 +75,10 @@ async function addStatus(clickEvent) {
     domManager.addChild(`.board-container[board-id="${boardId}"] .board-columns`, column);
     domManager.addEventListener(`.delete-column-button[data-delete-status-id="${status.id}"], .delete-column-button[data-delete-owner-id="${status.owner}"]`, "click", columnsManager.deleteStatus)
     let delete_buttons = document.querySelectorAll(`.delete-column-button[data-delete-status-id="${status.id}"], .delete-column-button[data-delete-owner-id="${status.owner}"]`)
-        for (let delete_button of delete_buttons){
-                delete_button.addEventListener("click", columnsManager.deleteStatus)
-        }
+    for (let delete_button of delete_buttons){
+           delete_button.addEventListener("click", columnsManager.deleteStatus)
+    }
+    await columnsManager.insertDragged()
 }
 
 
@@ -94,7 +95,8 @@ async function addCard(clickEvent) {
     let content = cardBuilder(card)
     await domManager.addChild(`.board-container[board-id="${boardId}"] .board-columns .board-column[data-column-id="1"] .board-column-content`, content);
     await domManager.addEventListener(`.card-remove[data-card-id="${card.id}"]`, "click", cardsManager.deleteButtonHandler)
-
+    await cardsManager.dragCards()
+    await cardsManager.insertDragged()
 }
 
 
