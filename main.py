@@ -1,5 +1,6 @@
 from flask import Flask, render_template, url_for, request, session, redirect
 from util import json_response
+import smtplib
 
 import os
 
@@ -30,6 +31,8 @@ def registration():
         new_username = new_user_data["username"]
         new_password = new_user_data["password"]
         new_password_confirmation = new_user_data["password-confirm"]
+        new_email = new_user_data['email']
+        send_email(new_email, new_username)
         if (new_password != new_password_confirmation) or (queires.get_user_data_by_name(new_username)):
             return render_template("registration.html", invalid=True)
         else:
@@ -50,7 +53,11 @@ def login():
             session["username"] = username
             user_data = queires.get_user_data_by_name(username)
             session["user_id"] = user_data.get("id")
-            return redirect(url_for("index"))
+            verify_code = login_datas['verify']
+            if verify_code == "1234":
+                return redirect(url_for("index"))
+            else:
+                return render_template("login.html", invalid=True)
         else:
             return render_template("login.html", invalid=True)
     return render_template("login.html")
@@ -202,6 +209,17 @@ def rename_column_by_id(column_id, column_title):
 @json_response
 def rename_card_by_id(card_id, card_title):
     queires.rename_card_by_id(card_id, card_title)
+
+
+def send_email(email, name):
+    email = email
+    subject = "The registration was successful"
+    text = f"Hello {name}!\nThank you for the registration.\nYour verify code:1234.\nBest wishes: Proman developer team!"
+    message = 'Subject: {}\n\n{}'.format(subject, text)
+    server = smtplib.SMTP("smtp.gmail.com", 587)
+    server.starttls()
+    server.login("proman202108@gmail.com", "Pro2021man08")
+    server.sendmail("proman202108@gmail.com", email, message)
 
 
 def main():

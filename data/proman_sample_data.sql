@@ -51,7 +51,8 @@ CREATE TABLE users(
     id          SERIAL PRIMARY KEY NOT NULL ,
     username    varchar (200)      NOT NULL ,
     salt        text               NOT NULL ,
-    hash        text               NOT NULL
+    hash        text               NOT NULL ,
+    email       text               NOT NULL
 );
 
 ---

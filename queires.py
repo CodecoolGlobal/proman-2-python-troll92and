@@ -27,11 +27,12 @@ def register_new_user(cursor, new_user_data):
     hashed_password = salt_hash.hash_password(password_string)
     cursor.execute(
         sql.SQL("""
-        INSERT INTO users (username, salt, hash)
-        VALUES ({username}, {salt}, {hashed_password})
+        INSERT INTO users (username, salt, hash, email)
+        VALUES ({username}, {salt}, {hashed_password}, {email})
     """).format(username=sql.Literal(new_user_data["username"]),
                 salt=sql.Literal(new_salt),
-                hashed_password=sql.Literal(hashed_password)
+                hashed_password=sql.Literal(hashed_password),
+                email=sql.Literal(new_user_data['email'])
         )
     )
 

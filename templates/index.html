@@ -15,17 +15,20 @@
         <script type="module" src="{{ url_for('static', filename='js/main.js') }}" defer></script>
     </head>
     <body>
-
-        <h1>ProMan</h1>
-        <div class="navbar-options">
-            {% if "username" in session %}
-            <li><a href="{{ url_for("logout") }}">logout</a></li>
-            {% else %}
-            <li><a href="{{ url_for("login") }}">login</a></li>
-            <li><a href={{ url_for("registration") }}>register</a></li>
-            {% endif %}
+        <nav class="navbar">
+            <div class="navbar-options">
+                {% if "username" in session %}
+                <li><a href="{{ url_for("logout") }}"><button TYPE="button">logout</button></a></li>
+                {% else %}
+                <li><a href={{ url_for("registration") }}><button TYPE="button">registration</button></a></li>
+                <li><a href="{{ url_for("login") }}"><button TYPE="button">login</button></a></li>
+                {% endif %}
+            </div>
+        </nav>
+        <div class="navbar-title">
+                <h1><a href="{{ url_for("index") }}" class="title">Proman</a></h1>
         </div>
-        <button class="add-board-button">Add new board</button>
-        <div id="root"></div>
+            <button class="add-board-button">Add new board</button>
+            <div id="root"></div>
     </body>
 </html>
