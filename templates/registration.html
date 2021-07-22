@@ -10,12 +10,15 @@
         <p>
             Invalid registration attempt
         </p>
-    {% else %}
+    {% elif succesful %}
         <p>
             Succesful registration!
             Now you can log in.
         </p>
     {% endif %}
+    <p>
+            <li><a href="{{ url_for("index") }}"></a></li>
+    </p>
     <form action="{{ url_for("registration") }}" method="post">
         <p>
             <label for="username">Username:</label>

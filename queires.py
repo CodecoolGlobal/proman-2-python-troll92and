@@ -1,6 +1,8 @@
 from psycopg2 import sql
 
+
 import data_manager
+import salt_hash
 
 
 @data_manager.connection_handler
@@ -14,16 +16,38 @@ def get_user_data_by_name(cursor, username):
             username=sql.Literal(username)
         )
     )
+    return cursor.fetchone()
 
 
 @data_manager.connection_handler
-def register_new_user(cursor, username, password):
-    cursor.execute("""
-        INSERT INTO users (username, password, board_id)
-        VALUES ({username}, {password})
-    """).format(username=sql.Literal(username),
-                password=sql.Literal(password)
-     )
+def register_new_user(cursor, new_user_data):
+    new_salt = salt_hash.get_salt()
+    password = new_user_data.get("password")
+    password_string = salt_hash.concat_salt_and_password(new_salt, password)
+    hashed_password = salt_hash.hash_password(password_string)
+    cursor.execute(
+        sql.SQL("""
+        INSERT INTO users (username, salt, hash)
+        VALUES ({username}, {salt}, {hashed_password})
+    """).format(username=sql.Literal(new_user_data["username"]),
+                salt=sql.Literal(new_salt),
+                hashed_password=sql.Literal(hashed_password)
+        )
+    )
+
+
+def valid_login(login_datas):
+    username = login_datas.get("username")
+    user_data = get_user_data_by_name(username)
+    if not user_data:
+        return False
+    user_data = dict(user_data)
+    entered_password = login_datas.get("password")
+    password_hash = user_data.get("hash")
+    salt = user_data.get("salt")
+    password_string = salt_hash.concat_salt_and_password(salt, entered_password)
+    is_matching = salt_hash.verify_password(password_string, password_hash)
+    return is_matching
 
 
 def get_card_status(status_id):

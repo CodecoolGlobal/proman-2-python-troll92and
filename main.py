@@ -1,11 +1,15 @@
 from flask import Flask, render_template, url_for, request, session, redirect
 from util import json_response
 
+import os
+
 import queires
 
 import mimetypes
+
 mimetypes.add_type('application/javascript', '.js')
 app = Flask(__name__)
+app.secret_key=os.environ.get("SECRET_KEY")
 
 
 @app.route("/")
@@ -29,9 +33,34 @@ def registration():
         if (new_password != new_password_confirmation) or (queires.get_user_data_by_name(new_username)):
             return render_template("registration.html", invalid=True)
         else:
-            queires.register_new_user(new_username, new_password)
-            return render_template("registration.html", invalid=False)
+            queires.register_new_user(new_user_data)
+            return render_template("index.html", succesful=True)
     return render_template("registration.html")
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "GET":
+        if "username" in session:
+            return redirect(url_for("index"))
+    elif request.method == "POST":
+        login_datas = dict(request.form)
+        if queires.valid_login(login_datas):
+            username = login_datas["username"]
+            session["username"] = username
+            user_data = queires.get_user_data_by_name(username)
+            session["user_id"] = user_data.get("id")
+            return redirect(url_for("index"))
+        else:
+            return render_template("login.html", invalid=True)
+    return render_template("login.html")
+
+
+@app.route("/logout")
+def logout():
+    session.pop("username", None)
+    session.pop("user_id", None)
+    return redirect(url_for("index"))
 
 
 @app.route("/get-boards")

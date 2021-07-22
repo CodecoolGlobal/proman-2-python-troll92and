@@ -19,9 +19,9 @@
         <h1>ProMan</h1>
         <div class="navbar-options">
 {#            {{ if user in session }}#}
-            <li><a>logout</a></li>
+            <li><a href="{{ url_for("logout") }}">logout</a></li>
 {#            {{ else }}#}
-            <li><a>login</a></li>
+            <li><a href="{{ url_for("login") }}">login</a></li>
             <li><a href={{ url_for("registration") }}>register</a></li>
 {#            {{ endif }}#}
         </div>

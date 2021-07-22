@@ -49,9 +49,8 @@ CREATE TABLE cards (
 CREATE TABLE users(
     id          SERIAL PRIMARY KEY NOT NULL ,
     username    varchar (200)      NOT NULL ,
-    password    varchar (200)      NOT NULL ,
-    board_id    INTEGER,
-    FOREIGN KEY (board_id) REFERENCES boards(id)
+    salt        text               NOT NULL ,
+    hash        text               NOT NULL
 );
 
 ---
@@ -80,7 +79,6 @@ INSERT INTO cards VALUES (nextval('cards_id_seq'), 2, 4, 'done card 1', 1);
 INSERT INTO cards VALUES (nextval('cards_id_seq'), 2, 4, 'done card 1', 2);
 
 
-INSERT INTO users(username, password) VALUES('rolika', 'csovesvohok');
 ---
 --- add constraints
 ---
