@@ -1,7 +1,8 @@
 export const htmlTemplates = {
     board: 1,
     column: 2,
-    card: 3
+    card: 3,
+    archive: 4
 }
 
 export function htmlFactory(template) {
@@ -12,6 +13,8 @@ export function htmlFactory(template) {
             return columnBuilder
         case htmlTemplates.card:
             return cardBuilder
+        case htmlTemplates.archive:
+            return archiveBuilder
         default:
             console.error("Undefined template: " + template)
             return () => { return "" }
@@ -24,6 +27,7 @@ function boardBuilder(board) {
                     <button class="add-new-card" new-card-id="${board.id}">New card</button>
                     <button class="add-new-status" new-status-id="${board.id}">New status</button>
                     <button class="delete-board-button" delete-board-id="${board.id}">Delete Board</button>
+                    <button class="toggle-archive-button" data-board-archive-id="${board.id}">Show Archive</button>
                     <button class="toggle-board-button" data-board-id="${board.id}">Show Cards</button>
                 </div>
                 <div class="board-columns">
@@ -45,4 +49,11 @@ function cardBuilder(card) {
                 <span class="card-title" card-title-id="${card.id}" contenteditable="true">${card.title}</span>
                 <div class="card-remove" data-card-id="${card.id}">X</div>
             </div>`;
+}
+
+function archiveBuilder(boardId) {
+    return `<div class="archive" archive-board-id="${boardId}" toggle-show="${false}">
+                <span class="archive-title">Archive</span>
+                <div class="archive-content" archive-owner-id="${boardId}"></div>
+            </div>`
 }

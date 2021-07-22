@@ -116,6 +116,12 @@ def get_last_status_id():
     return queires.get_max_id_status()
 
 
+@app.route("/get-archived-cards/<board_id>")
+@json_response
+def get_archived_cards(board_id):
+    return queires.get_archived_cards(board_id)
+
+
 @app.route("/get-last-board-id")
 @json_response
 def get_last_board():
