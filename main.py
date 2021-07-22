@@ -17,7 +17,7 @@ def index():
     """
     This is a one-pager which shows all the boards and cards
     """
-    return render_template('index.html')
+    return render_template('index.html', logged=False)
 
 
 @app.route("/registration", methods=["GET", "POST"])
@@ -35,6 +35,7 @@ def registration():
         else:
             queires.register_new_user(new_user_data)
             return render_template("index.html", succesful=True)
+    print("béla")
     return render_template("registration.html")
 
 
