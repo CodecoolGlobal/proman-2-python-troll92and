@@ -22,29 +22,8 @@ export let boardsManager = {
             domManager.addEventListener(`.board-title[title-id="${board.id}"]`, "click", changeBoardTitle)
         }
 
-    },/*
-    orderCards: async function(){
-        let cards_parents = document.querySelectorAll('.board-column-content')
-        for (let cards_parent of cards_parents){
-            let children = cards_parent.children
-            let cards = []
-            let i = 0
-            for (let child of children){
-                cards.splice(i,0,child)
-            }
-            cards.sort(function(card, card2){return card.getAttribute('data-card-order')-card2.getAttribute('data-card-order')})
-            console.log(cards)
-            for (let card of cards){
-                console.log(cards_parent)
-                cards_parent.removeChild(card)
-            }
-            for (let card of cards){
-                domManager.addChild(cards_parent,card)
+    },
 
-            console.log(card)
-            }
-        }
-    }*/
 }
 
 async function showHideButtonHandler(clickEvent) {
@@ -63,7 +42,6 @@ async function showHideButtonHandler(clickEvent) {
         current_board.getElementsByClassName('toggle-board-button')[0].innerText = "Hide Cards";
         await columnsManager.loadColumns(boardId);
         await cardsManager.loadCards(boardId)
-        //await boardsManager.orderCards()
     }
 }
 
@@ -106,7 +84,6 @@ async function addStatus(clickEvent) {
     }
     let parentOfTarget = document.querySelector(`.board-column[data-column-id="${status.id}"]`)
     let target = parentOfTarget.children[1]
-    console.log(target)
     await columnsManager.insertDragged([target])
 }
 
@@ -138,7 +115,6 @@ async function deleteBoard(clickEvent){
     await dataHandler.deleteBoardById(boardId)
     let boards = document.getElementsByClassName('board-container');
     for (let board of boards) {
-        console.log(board.attributes['board-id'].nodeValue)
         if(boardId === board.attributes['board-id'].nodeValue) {
             root.removeChild(board)
             break;

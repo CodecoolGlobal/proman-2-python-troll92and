@@ -120,6 +120,13 @@ def update_card_position(data):
     queires.update_card_position(data)
 
 
+@app.route("/update-card-order/<data>", methods=["POST"])
+@json_response
+def update_card_order(data):
+    data = list(data.split(','))
+    queires.update_card_order(data)
+
+
 @app.route("/rename-board-by-id/<int:board_id>/<string:board_title>", methods=["POST"])
 @json_response
 def rename_board_by_id(board_id, board_title):

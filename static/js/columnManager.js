@@ -54,13 +54,10 @@ export let columnsManager = {
         }
     },
     changeColumnTitle: function (clickEvent) {
-        console.log('asd0')
         const columnId = clickEvent.target.attributes['column-title-id'].nodeValue;
         let element = document.querySelector(`.board-column-title[column-title-id='${columnId}']`)
         let oldText = element.innerText
-        console.log('asd1')
         element.addEventListener('focusout', async () => {
-        console.log('asd2')
             let title = element.innerText
             if (title === "") {
                 element.innerText = "unnamed"
@@ -69,6 +66,17 @@ export let columnsManager = {
                 await dataHandler.renameColumn(columnId, title)
             }
         })
+    },
+    orderCards: async function(card){
+        let cardID = card.attributes['data-card-id'].nodeValue
+        let cards_parent = document.querySelector(`.card[data-card-id="${cardID}"]`)
+        let children = cards_parent.parentNode.childNodes
+        let order = 1
+        for (let child of children){
+            child.attributes['data-card-order'].nodeValue = order
+            await dataHandler.updateCardOrder(child.attributes['data-card-id'].nodeValue, order)
+            order++
+        }
     }
 }
 

@@ -70,9 +70,12 @@ export let dataHandler = {
     deleteCardById: async function(card_id){
         await apiPost(`/delete-card-by-id/${card_id}`)
     },
-
-    updateCardPosition: async function(id, board_id, status_id, card_order){
-        let payload = [id, board_id, status_id, card_order];
+    updateCardOrder: async function(id, card_order){
+        let payload = [id, card_order];
+        await apiPost(`/update-card-order/${payload}`)
+    },
+    updateCardPosition: async function(id, board_id, status_id){
+        let payload = [id, board_id, status_id];
         await apiPost(`/update-card-by-id/${payload}`)
     },
     renameBoard: async function(boardId, boardTitle){

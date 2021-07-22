@@ -50,7 +50,7 @@ def get_cards_for_board(board_id):
         """
         SELECT * FROM cards
         WHERE cards.board_id = %(board_id)s
-        ORDER BY cards.board_id DESC, cards.status_id DESC , cards.card_order DESC 
+        ORDER BY cards.board_id ASC, cards.status_id ASC, cards.card_order ASC
         ;
         """
         , {"board_id": board_id})
@@ -223,13 +223,26 @@ def update_card_position(cursor, data):
     cursor.execute(
         sql.SQL("""
             UPDATE cards
-            SET (id, board_id, status_id, card_order) = ({id}, {board_id}, {status_id}, {card_order})
+            SET (id, board_id, status_id) = ({id}, {board_id}, {status_id})
             WHERE id = {id}
         """).format(
             id=sql.Literal(data[0]),
             board_id=sql.Literal(data[1]),
-            status_id=sql.Literal(data[2]),
-            card_order=sql.Literal(data[3])
+            status_id=sql.Literal(data[2])
+        )
+    )
+
+
+@data_manager.connection_handler
+def update_card_order(cursor, data):
+    cursor.execute(
+        sql.SQL("""
+            UPDATE cards
+            SET card_order = {order}
+            WHERE id = {id}
+        """).format(
+            id=sql.Literal(data[0]),
+            order=sql.Literal(data[1]),
         )
     )
 

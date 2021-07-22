@@ -1,6 +1,7 @@
 import { dataHandler } from "./dataHandler.js";
 import { htmlFactory, htmlTemplates } from "./htmlFactory.js";
 import { domManager } from "./domManager.js";
+import {columnsManager} from "./columnManager.js";
 
 export let cardsManager = {
     loadCards: async function (boardId) {
@@ -42,7 +43,6 @@ export let cardsManager = {
                 dragAble.classList.remove('over_id')
                 dragAble.classList.remove('over_card')
                 dragAble.classList.remove('over_content')
-
                 let parent = dragAble.parentNode
                 let children = parent.childNodes
                 let card = {
@@ -51,23 +51,13 @@ export let cardsManager = {
                     status_id : 0,
                     card_order: 0
                 }
-                if (children.length === 1){
-                    let child = children[0]
+                for (let child of children){
                     card.id = child.attributes[1].nodeValue
                     card.board_id = parent.parentNode.parentNode.parentNode.attributes["board-id"].nodeValue
                     card.status_id = parent.parentNode.attributes["data-column-id"].nodeValue
-                    card.card_order = 1
-                    dataHandler.updateCardPosition(card.id, card.board_id, card.status_id, card.card_order)
-                }else if (children.length > 0){
-                    for (let order = 1; order < children.length; order++){
-                        let child = children[order]
-                        card.id = child.attributes[1].nodeValue
-                        card.board_id = parent.parentNode.parentNode.parentNode.attributes["board-id"].nodeValue
-                        card.status_id = parent.parentNode.attributes["data-column-id"].nodeValue
-                        card.card_order = order
-                        dataHandler.updateCardPosition(card.id, card.board_id, card.status_id, card.card_order)
-                    }
+                    dataHandler.updateCardPosition(card.id, card.board_id, card.status_id)
                 }
+                columnsManager.orderCards(dragAble)
             })
         }
 
