@@ -122,6 +122,19 @@ def get_card_order(board_id, status_id):
     return card_order[0]['max']
 
 
+def get_card_by_id(card_id):
+    card_data = data_manager.execute_select(
+        sql.SQL("""
+        SELECT * FROM cards
+        WHERE cards.id = {id}
+        ;
+        """).format(
+            id=sql.Literal(card_id)
+        )
+    )
+    return card_data[0]
+
+
 def get_max_id_card():
     last_card = data_manager.execute_select(
         """

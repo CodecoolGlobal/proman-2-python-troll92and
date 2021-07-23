@@ -66,6 +66,8 @@ export let cardsManager = {
     },
     insertDragged: async function(cards){
         for (let card of cards){
+            let cardId = await card.getAttribute('data-card-id')
+            const cardData = await dataHandler.getCard(cardId)
             card.addEventListener('dragover', e => {
                 e.preventDefault()
                 const draggable = document.querySelector('.dragging')

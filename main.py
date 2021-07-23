@@ -103,6 +103,16 @@ def get_cards_for_board(board_id: int):
     return queires.get_cards_for_board(board_id)
 
 
+@app.route("/get-card-by-id/<int:card_id>")
+@json_response
+def get_card_by_id(card_id):
+    """
+    All cards that belongs to a board
+    :param card_id: id of the parent board
+    """
+    return queires.get_card_by_id(card_id)
+
+
 @app.route("/get-cards/<int:board_id>/<int:column_id>")
 @json_response
 def get_card_order(board_id: int, column_id: int):

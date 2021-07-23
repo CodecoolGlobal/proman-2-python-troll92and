@@ -44,6 +44,8 @@ export let dataHandler = {
     },
 
     getCard: async function (cardId) {
+        let response = await apiGet(`/get-card-by-id/${cardId}`)
+        return response
         // the card is retrieved and then the callback function is called with the card
     },
 

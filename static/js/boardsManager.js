@@ -54,25 +54,42 @@ export let boardsManager = {
                 let added_card = document.querySelector(`.card-title[card-title-id="${card.id}"]`)
                 added_card.parentNode.setAttribute("draggable",false)
                 domManager.addEventListener(`.card-title[card-title-id="${card.id}"]`, "click", cardsManager.changeCardTitle)
+                domManager.addEventListener(`.card-archive[data-card-archive-id="${card.id}"]`, "click", boardsManager.toggleArchiveCard)
                 domManager.addEventListener(`.card-remove[data-card-id="${card.id}"]`, "click", cardsManager.deleteButtonHandler)
+
             }
         }
     },
     toggleArchiveCard: async function(clickEvent){
         const cardId = clickEvent.target.dataset.cardArchiveId;
-        const currentCard = document.querySelector(`.card[data-card-id="${cardId}"]`)
+        const currentCard = await document.querySelector(`.card[data-card-id="${cardId}"]`)
+        const currentCardData = await dataHandler.getCard(cardId)
         const parent = currentCard.parentNode
-        const boardId = parent.parentNode.parentNode.parentNode.attributes['board-id'].nodeValue
+        const boardId = currentCardData.board_id
+        const cardSlot = await document.querySelector(`.board-container[board-id="${boardId}"] .board-columns .board-column[data-column-id="${currentCardData.status_id}"] .board-column-content`)
         const boardArchive = document.querySelector(`.archive[archive-board-id="${boardId}"]`)
-        const archiveOpen = parent.parentNode.parentNode.parentNode.childNodes[1].childNodes[8].childNodes[0].data
+        const archiveOpen = document.querySelector(`.toggle-archive-button[data-board-archive-id="${boardId}"]`).childNodes[0].data
+
         if (parent.classList[0] === "board-column-content"){
             parent.removeChild(currentCard)
-            console.log(archiveOpen !== "Show Archive")
             if (archiveOpen !== "Show Archive"){
                 boardArchive.appendChild(currentCard)
-            }
+                //await currentCard.removeEventListener('dragend', cardsManager.insertDragged, false);
+                //await currentCard.removeEventListener('dragstart', cardsManager.insertDragged, false);
+                //await currentCard.removeEventListener('dragover', cardsManager.insertDragged, false);
+                //await currentCard.removeEventListener('dragleave', cardsManager.insertDragged, false);
+            }//please send help it's 2021.07.23 - 4:18
             await dataHandler.updateCardArchivedStatus(cardId, "True")
+        }else{
+            parent.removeChild(currentCard)
+            cardSlot.appendChild(currentCard)
+            await dataHandler.updateCardArchivedStatus(cardId, "False")
+            domManager.addEventListener(`.card-title[card-title-id="${cardId}"]`, "click", cardsManager.changeCardTitle)
+            domManager.addEventListener(`.card-archive[data-card-archive-id="${cardId}"]`, "click", boardsManager.toggleArchiveCard)
+            domManager.addEventListener(`.card-remove[data-card-id="${cardId}"]`, "click", cardsManager.deleteButtonHandler)
+
         }
+
     }
 }
 
@@ -138,8 +155,7 @@ async function addStatus(clickEvent) {
         for (let delete_button of delete_buttons){
                delete_button.addEventListener("click", columnsManager.deleteStatus)
         }
-        let parentOfTarget = document.querySelector(`.board-column[data-column-id="${status.id}"]`)
-        let target = parentOfTarget.children[1]
+        let target = document.querySelector(`.board-container[board-id="${boardId}"] .board-columns .board-column[data-column-id="${status.id}"] .board-column-content`)
         await columnsManager.insertDragged([target])
     }
 }
