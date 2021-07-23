@@ -169,13 +169,14 @@ def get_archived_cards(board_id):
 def add_new_card(cursor, data):
     cursor.execute(
         sql.SQL("""
-        INSERT INTO cards(title, board_id, status_id, card_order)
-        VALUES ({title},{board_id},{status_id},{card_order})
+        INSERT INTO cards(title, board_id, status_id, card_order, archived)
+        VALUES ({title},{board_id},{status_id},{card_order}, {archived})
         """).format(
             title=sql.Literal(data[0]),
             board_id=sql.Literal(data[1]),
             status_id=sql.Literal(data[2]),
-            card_order=sql.Literal(data[3])
+            card_order=sql.Literal(data[3]),
+            archived=sql.Literal(data[4])
         )
     )
 

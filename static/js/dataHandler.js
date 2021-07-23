@@ -58,9 +58,9 @@ export let dataHandler = {
         await apiPost(`/add-new-status/${payload}`)
     },
 
-    createNewCard: async function (cardTitle, boardId, statusId, cardOrder) {
+    createNewCard: async function (cardTitle, boardId, statusId, cardOrder, archived) {
         // creates new card, saves it and calls the callback function with its data
-        let payload = [cardTitle, boardId, statusId, cardOrder];
+        let payload = [cardTitle, boardId, statusId, cardOrder, archived];
         await apiPost(`/add-new-card/${payload}`)
     },
 

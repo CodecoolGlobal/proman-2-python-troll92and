@@ -13,6 +13,11 @@ app = Flask(__name__)
 app.secret_key=os.environ.get("SECRET_KEY")
 
 
+@app.before_first_request
+def clear_session():
+    session.clear()
+
+
 @app.route("/")
 def index():
     """

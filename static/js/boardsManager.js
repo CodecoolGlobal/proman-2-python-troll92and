@@ -25,17 +25,20 @@ export let boardsManager = {
     },
     archiveButtonHandler: async function(clickEvent){
         const boardId = clickEvent.target.attributes['data-board-archive-id'].nodeValue
-        let current_archive = document.querySelector(`.archive[archive-board-id="${boardId}"]`);
-        if (current_archive === null ){
-            let current_board = document.querySelector(`.board-container[board-id="${boardId}"]`)
-            current_board.getElementsByClassName('toggle-archive-button')[0].innerHTML = "Hide archive"
-            await boardsManager.archiveLoad(boardId)
-        }else{
-            let parent = current_archive.parentNode
-            parent.removeChild(current_archive)
-            let current_board = document.querySelector(`.board-container[board-id="${boardId}"]`)
-            current_board.getElementsByClassName('toggle-archive-button')[0].innerHTML = "Show archive"
+        let button = document.querySelector(`.toggle-board-button[data-board-id="${boardId}"]`)
+        if (button.childNodes[0].data !== "Show Cards") {
 
+            let current_archive = document.querySelector(`.archive[archive-board-id="${boardId}"]`);
+            if (current_archive === null) {
+                let current_board = document.querySelector(`.board-container[board-id="${boardId}"]`)
+                current_board.getElementsByClassName('toggle-archive-button')[0].innerHTML = "Hide archive"
+                await boardsManager.archiveLoad(boardId)
+            } else {
+                let parent = current_archive.parentNode
+                parent.removeChild(current_archive)
+                let current_board = document.querySelector(`.board-container[board-id="${boardId}"]`)
+                current_board.getElementsByClassName('toggle-archive-button')[0].innerHTML = "Show archive"
+            }
         }
     },
     archiveLoad: async function(boardId){
@@ -50,15 +53,11 @@ export let boardsManager = {
                 domManager.addChild(` .archive-content[archive-owner-id="${boardId}"`, card_content)
                 let added_card = document.querySelector(`.card-title[card-title-id="${card.id}"]`)
                 added_card.parentNode.setAttribute("draggable",false)
-                console.log(added_card.parentNode)
                 domManager.addEventListener(`.card-title[card-title-id="${card.id}"]`, "click", cardsManager.changeCardTitle)
                 domManager.addEventListener(`.card-remove[data-card-id="${card.id}"]`, "click", cardsManager.deleteButtonHandler)
             }
         }
-
-
     }
-
 }
 
 async function showHideButtonHandler(clickEvent) {
@@ -73,6 +72,7 @@ async function showHideButtonHandler(clickEvent) {
     if (current_board.getElementsByClassName('board-columns')[0].innerText.length > 0) {
         current_board.getElementsByClassName('board-columns')[0].innerHTML = "";
         current_board.getElementsByClassName('toggle-board-button')[0].innerText = "Show Cards";
+        current_board.getElementsByClassName('toggle-archive-button')[0].innerHTML = "Show archive";
     } else {
         current_board.getElementsByClassName('toggle-board-button')[0].innerText = "Hide Cards";
         await columnsManager.loadColumns(boardId);
@@ -96,52 +96,61 @@ async function addBoard(){
     domManager.addEventListener(`.toggle-board-button[data-board-id="${board.id}"]`, "click", showHideButtonHandler)
     domManager.addEventListener(`.delete-board-button[delete-board-id="${board.id}"]`, "click", deleteBoard)
     domManager.addEventListener(`.board-title[title-id="${board.id}"]`, "click", changeBoardTitle)
+    domManager.addEventListener(`.toggle-archive-button[data-board-archive-id="${board.id}"]`, "click", boardsManager.archiveButtonHandler)
+
 }
 
 
 async function addStatus(clickEvent) {
     const boardId = clickEvent.target.attributes['new-status-id'].nodeValue;
-    let status = {
-        id : 0,
-        title : "New Status",
-        owner : boardId
+    let button = document.querySelector(`.toggle-board-button[data-board-id="${boardId}"]`)
+    if (button.childNodes[0].data !== "Show Cards"){
+
+        let status = {
+            id : 0,
+            title : "New Status",
+            owner : boardId
+        }
+        await dataHandler.createNewStatus(status.title, status.owner )
+        status.id = await dataHandler.getLastStatusId()
+        const columnBuilder = htmlFactory(htmlTemplates.column);
+        let column = columnBuilder(status)
+        domManager.addChild(`.board-container[board-id="${boardId}"] .board-columns`, column);
+        domManager.addEventListener(`.board-column-title[column-title-id='${status.id}']`, "click", columnsManager.changeColumnTitle)
+        domManager.addEventListener(`.delete-column-button[data-delete-status-id="${status.id}"], .delete-column-button[data-delete-owner-id="${status.owner}"]`, "click", columnsManager.deleteStatus)
+        let delete_buttons = document.querySelectorAll(`.delete-column-button[data-delete-status-id="${status.id}"], .delete-column-button[data-delete-owner-id="${status.owner}"]`)
+        for (let delete_button of delete_buttons){
+               delete_button.addEventListener("click", columnsManager.deleteStatus)
+        }
+        let parentOfTarget = document.querySelector(`.board-column[data-column-id="${status.id}"]`)
+        let target = parentOfTarget.children[1]
+        await columnsManager.insertDragged([target])
     }
-    await dataHandler.createNewStatus(status.title, status.owner )
-    status.id = await dataHandler.getLastStatusId()
-    const columnBuilder = htmlFactory(htmlTemplates.column);
-    let column = columnBuilder(status)
-    domManager.addChild(`.board-container[board-id="${boardId}"] .board-columns`, column);
-    domManager.addEventListener(`.board-column-title[column-title-id='${status.id}']`, "click", columnsManager.changeColumnTitle)
-    domManager.addEventListener(`.delete-column-button[data-delete-status-id="${status.id}"], .delete-column-button[data-delete-owner-id="${status.owner}"]`, "click", columnsManager.deleteStatus)
-    let delete_buttons = document.querySelectorAll(`.delete-column-button[data-delete-status-id="${status.id}"], .delete-column-button[data-delete-owner-id="${status.owner}"]`)
-    for (let delete_button of delete_buttons){
-           delete_button.addEventListener("click", columnsManager.deleteStatus)
-    }
-    let parentOfTarget = document.querySelector(`.board-column[data-column-id="${status.id}"]`)
-    let target = parentOfTarget.children[1]
-    await columnsManager.insertDragged([target])
 }
 
 
 async function addCard(clickEvent) {
     const boardId = clickEvent.target.attributes['new-card-id'].nodeValue;
-    let card = {
-        id : 0,
-        title : "New Card",
-        card_order : await dataHandler.getCardOrderByBoardColumnId(boardId,"1") + 1
+    let button = document.querySelector(`.toggle-board-button[data-board-id="${boardId}"]`)
+    if (button.childNodes[0].data !== "Show Cards") {
+        let card = {
+            id: 0,
+            title: "New Card",
+            card_order: await dataHandler.getCardOrderByBoardColumnId(boardId, "1") + 1,
+            archived: false
+        }
+        await dataHandler.createNewCard(card.title, boardId, '1', card.card_order, card.archived)
+        card.id = await dataHandler.getLastCardId()
+        const cardBuilder = htmlFactory(htmlTemplates.card);
+        let content = cardBuilder(card)
+        await domManager.addChild(`.board-container[board-id="${boardId}"] .board-columns .board-column[data-column-id="1"] .board-column-content`, content);
+        await domManager.addEventListener(`.card-title[card-title-id="${card.id}"]`, "click", cardsManager.changeCardTitle)
+        await domManager.addEventListener(`.card-remove[data-card-id="${card.id}"]`, "click", cardsManager.deleteButtonHandler)
+
+        let target = document.querySelector(`.card[data-card-id="${card.id}"]`)
+        await cardsManager.dragCards([target])
+        await cardsManager.insertDragged([target])
     }
-    await dataHandler.createNewCard(card.title, boardId, '1', card.card_order)
-    card.id = await dataHandler.getLastCardId()
-    const cardBuilder = htmlFactory(htmlTemplates.card);
-    let content = cardBuilder(card)
-    await domManager.addChild(`.board-container[board-id="${boardId}"] .board-columns .board-column[data-column-id="1"] .board-column-content`, content);
-    await domManager.addEventListener(`.card-title[card-title-id="${card.id}"]`, "click", cardsManager.changeCardTitle)
-    await domManager.addEventListener(`.card-remove[data-card-id="${card.id}"]`, "click", cardsManager.deleteButtonHandler)
-
-    let target = document.querySelector(`.card[data-card-id="${card.id}"]`)
-    await cardsManager.dragCards([target])
-    await cardsManager.insertDragged([target])
-
 }
 
 
