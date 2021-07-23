@@ -13,6 +13,11 @@ app = Flask(__name__)
 app.secret_key=os.environ.get("SECRET_KEY")
 
 
+@app.before_first_request
+def clear_session():
+    session.clear()
+
+
 @app.route("/")
 def index():
     """
@@ -79,7 +84,6 @@ def get_boards():
         return queires.get_boards()
 
 
-
 @app.route("/get-columns")
 @json_response
 def get_columns():
@@ -97,6 +101,16 @@ def get_cards_for_board(board_id: int):
     :param board_id: id of the parent board
     """
     return queires.get_cards_for_board(board_id)
+
+
+@app.route("/get-card-by-id/<int:card_id>")
+@json_response
+def get_card_by_id(card_id):
+    """
+    All cards that belongs to a board
+    :param card_id: id of the parent board
+    """
+    return queires.get_card_by_id(card_id)
 
 
 @app.route("/get-cards/<int:board_id>/<int:column_id>")
@@ -184,6 +198,13 @@ def delete_card_by_id(card_id):
 def update_card_position(data):
     data = list(data.split(','))
     queires.update_card_position(data)
+
+
+@app.route("/update-card-archive-status/<data>", methods=["POST"])
+@json_response
+def update_card_archived_status(data):
+    data = list(data.split(','))
+    queires.update_card_archive_status(data)
 
 
 @app.route("/update-card-order/<data>", methods=["POST"])

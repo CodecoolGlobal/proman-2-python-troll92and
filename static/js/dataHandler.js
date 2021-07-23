@@ -44,6 +44,8 @@ export let dataHandler = {
     },
 
     getCard: async function (cardId) {
+        let response = await apiGet(`/get-card-by-id/${cardId}`)
+        return response
         // the card is retrieved and then the callback function is called with the card
     },
 
@@ -58,9 +60,9 @@ export let dataHandler = {
         await apiPost(`/add-new-status/${payload}`)
     },
 
-    createNewCard: async function (cardTitle, boardId, statusId, cardOrder) {
+    createNewCard: async function (cardTitle, boardId, statusId, cardOrder, archived) {
         // creates new card, saves it and calls the callback function with its data
-        let payload = [cardTitle, boardId, statusId, cardOrder];
+        let payload = [cardTitle, boardId, statusId, cardOrder, archived];
         await apiPost(`/add-new-card/${payload}`)
     },
 
@@ -82,6 +84,10 @@ export let dataHandler = {
     updateCardPosition: async function(id, board_id, status_id){
         let payload = [id, board_id, status_id];
         await apiPost(`/update-card-by-id/${payload}`)
+    },
+    updateCardArchivedStatus: async function(id, archived){
+        let payload = [id, archived];
+        await apiPost(`/update-card-archive-status/${payload}`)
     },
     renameBoard: async function(boardId, boardTitle){
         await apiPost(`/rename-board-by-id/${boardId}/${boardTitle}`)

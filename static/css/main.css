@@ -4,6 +4,7 @@
     --status-2: #594300;
     --status-3: #525900;
     --status-4: #085900;
+    --status-5: #085990;
 }
 
 body{
@@ -39,7 +40,7 @@ span{
     margin-right: auto;
 }
 
-.add-new-card, .add-new-status, .add-board-button, .delete-board-button, .delete-column-button{
+.add-new-card, .add-new-status, .add-board-button, .delete-board-button, .delete-column-button, .toggle-archive-button{
     background: #222;
     color: #fff;
     font-size: 14px;
@@ -93,7 +94,7 @@ section.board{
     flex-wrap:nowrap;
 }
 
-.board-column{
+.board-column, .archive{
     padding: 10px;
     flex: 1;
 }
@@ -140,14 +141,23 @@ section.board{
     background: var(--status-4);
 }
 
-.card-remove{
-    //display: block;
+.archive .card{
+    background: var(--status-5);
+}
+
+.card-remove, .card-archive{
     position: absolute;
     top: 4px;
     right: 4px;
     font-size: 12px;
     cursor: pointer;
     background: black;
+}
+
+.card-archive{
+    top: 4px;
+    right: 16px;
+
 }
 
 .card-title{

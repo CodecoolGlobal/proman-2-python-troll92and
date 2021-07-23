@@ -122,6 +122,19 @@ def get_card_order(board_id, status_id):
     return card_order[0]['max']
 
 
+def get_card_by_id(card_id):
+    card_data = data_manager.execute_select(
+        sql.SQL("""
+        SELECT * FROM cards
+        WHERE cards.id = {id}
+        ;
+        """).format(
+            id=sql.Literal(card_id)
+        )
+    )
+    return card_data[0]
+
+
 def get_max_id_card():
     last_card = data_manager.execute_select(
         """
@@ -169,13 +182,14 @@ def get_archived_cards(board_id):
 def add_new_card(cursor, data):
     cursor.execute(
         sql.SQL("""
-        INSERT INTO cards(title, board_id, status_id, card_order)
-        VALUES ({title},{board_id},{status_id},{card_order})
+        INSERT INTO cards(title, board_id, status_id, card_order, archived)
+        VALUES ({title},{board_id},{status_id},{card_order}, {archived})
         """).format(
             title=sql.Literal(data[0]),
             board_id=sql.Literal(data[1]),
             status_id=sql.Literal(data[2]),
-            card_order=sql.Literal(data[3])
+            card_order=sql.Literal(data[3]),
+            archived=sql.Literal(data[4])
         )
     )
 
@@ -291,6 +305,20 @@ def update_card_position(cursor, data):
             id=sql.Literal(data[0]),
             board_id=sql.Literal(data[1]),
             status_id=sql.Literal(data[2])
+        )
+    )
+
+
+@data_manager.connection_handler
+def update_card_archive_status(cursor, data):
+    cursor.execute(
+        sql.SQL("""
+            UPDATE cards
+            SET (id, archived) = ({id}, {archived})
+            WHERE id = {id}
+        """).format(
+            id=sql.Literal(data[0]),
+            archived=sql.Literal(data[1])
         )
     )
 

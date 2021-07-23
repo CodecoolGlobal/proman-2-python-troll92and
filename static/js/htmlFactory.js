@@ -47,12 +47,13 @@ function columnBuilder(column) {
 function cardBuilder(card) {
     return `<div class="card" data-card-id="${card.id}" data-card-order="${card.card_order}" draggable="true">
                 <span class="card-title" card-title-id="${card.id}" contenteditable="true">${card.title}</span>
+                <div class="card-archive" data-card-archive-id="${card.id}">A</div>
                 <div class="card-remove" data-card-id="${card.id}">X</div>
             </div>`;
 }
 
 function archiveBuilder(boardId) {
-    return `<div class="archive" archive-board-id="${boardId}" toggle-show="${false}">
+    return `<div class="archive" archive-board-id="${boardId}">
                 <span class="archive-title">Archive</span>
                 <div class="archive-content" archive-owner-id="${boardId}"></div>
             </div>`
