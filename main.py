@@ -84,7 +84,6 @@ def get_boards():
         return queires.get_boards()
 
 
-
 @app.route("/get-columns")
 @json_response
 def get_columns():
@@ -189,6 +188,13 @@ def delete_card_by_id(card_id):
 def update_card_position(data):
     data = list(data.split(','))
     queires.update_card_position(data)
+
+
+@app.route("/update-card-archive-status/<data>", methods=["POST"])
+@json_response
+def update_card_archived_status(data):
+    data = list(data.split(','))
+    queires.update_card_archive_status(data)
 
 
 @app.route("/update-card-order/<data>", methods=["POST"])

@@ -297,6 +297,20 @@ def update_card_position(cursor, data):
 
 
 @data_manager.connection_handler
+def update_card_archive_status(cursor, data):
+    cursor.execute(
+        sql.SQL("""
+            UPDATE cards
+            SET (id, archived) = ({id}, {archived})
+            WHERE id = {id}
+        """).format(
+            id=sql.Literal(data[0]),
+            archived=sql.Literal(data[1])
+        )
+    )
+
+
+@data_manager.connection_handler
 def update_card_order(cursor, data):
     cursor.execute(
         sql.SQL("""

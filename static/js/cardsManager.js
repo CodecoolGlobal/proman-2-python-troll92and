@@ -2,6 +2,7 @@ import { dataHandler } from "./dataHandler.js";
 import { htmlFactory, htmlTemplates } from "./htmlFactory.js";
 import { domManager } from "./domManager.js";
 import {columnsManager} from "./columnManager.js";
+import {boardsManager} from "./boardsManager.js";
 
 export let cardsManager = {
     loadCards: async function (boardId) {
@@ -11,6 +12,7 @@ export let cardsManager = {
             const content = cardBuilder(card)
             domManager.addChild(`.board-container[board-id="${boardId}"] .board-columns .board-column[data-column-id="${card.status_id}"] .board-column-content`, content)
             domManager.addEventListener(`.card-title[card-title-id="${card.id}"]`, "click", cardsManager.changeCardTitle)
+            domManager.addEventListener(`.card-archive[data-card-archive-id="${card.id}"]`, "click", boardsManager.toggleArchiveCard)
             domManager.addEventListener(`.card-remove[data-card-id="${card.id}"]`, "click", cardsManager.deleteButtonHandler)
         }
         let dragAbles = document.getElementsByClassName('card')

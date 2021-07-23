@@ -31,13 +31,13 @@ export let boardsManager = {
             let current_archive = document.querySelector(`.archive[archive-board-id="${boardId}"]`);
             if (current_archive === null) {
                 let current_board = document.querySelector(`.board-container[board-id="${boardId}"]`)
-                current_board.getElementsByClassName('toggle-archive-button')[0].innerHTML = "Hide archive"
+                current_board.getElementsByClassName('toggle-archive-button')[0].innerHTML = "Hide Archive"
                 await boardsManager.archiveLoad(boardId)
             } else {
                 let parent = current_archive.parentNode
                 parent.removeChild(current_archive)
                 let current_board = document.querySelector(`.board-container[board-id="${boardId}"]`)
-                current_board.getElementsByClassName('toggle-archive-button')[0].innerHTML = "Show archive"
+                current_board.getElementsByClassName('toggle-archive-button')[0].innerHTML = "Show Archive"
             }
         }
     },
@@ -56,6 +56,22 @@ export let boardsManager = {
                 domManager.addEventListener(`.card-title[card-title-id="${card.id}"]`, "click", cardsManager.changeCardTitle)
                 domManager.addEventListener(`.card-remove[data-card-id="${card.id}"]`, "click", cardsManager.deleteButtonHandler)
             }
+        }
+    },
+    toggleArchiveCard: async function(clickEvent){
+        const cardId = clickEvent.target.dataset.cardArchiveId;
+        const currentCard = document.querySelector(`.card[data-card-id="${cardId}"]`)
+        const parent = currentCard.parentNode
+        const boardId = parent.parentNode.parentNode.parentNode.attributes['board-id'].nodeValue
+        const boardArchive = document.querySelector(`.archive[archive-board-id="${boardId}"]`)
+        const archiveOpen = parent.parentNode.parentNode.parentNode.childNodes[1].childNodes[8].childNodes[0].data
+        if (parent.classList[0] === "board-column-content"){
+            parent.removeChild(currentCard)
+            console.log(archiveOpen !== "Show Archive")
+            if (archiveOpen !== "Show Archive"){
+                boardArchive.appendChild(currentCard)
+            }
+            await dataHandler.updateCardArchivedStatus(cardId, "True")
         }
     }
 }

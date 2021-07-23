@@ -99,7 +99,7 @@ section.board{
     flex: 1;
 }
 
-.board-column-content, .archive-content{
+.board-column-content{
     min-height: 49px;
 }
 

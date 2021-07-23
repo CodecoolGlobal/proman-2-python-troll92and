@@ -83,6 +83,10 @@ export let dataHandler = {
         let payload = [id, board_id, status_id];
         await apiPost(`/update-card-by-id/${payload}`)
     },
+    updateCardArchivedStatus: async function(id, archived){
+        let payload = [id, archived];
+        await apiPost(`/update-card-archive-status/${payload}`)
+    },
     renameBoard: async function(boardId, boardTitle){
         await apiPost(`/rename-board-by-id/${boardId}/${boardTitle}`)
     },
