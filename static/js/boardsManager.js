@@ -25,9 +25,11 @@ export let boardsManager = {
     },
     archiveButtonHandler: async function(clickEvent){
         const boardId = clickEvent.target.attributes['data-board-archive-id'].nodeValue
+        //clickevent.currentTarget : arra hat amire az event van megadva
+        //const let helyett ahol nem változik az érték
         let button = document.querySelector(`.toggle-board-button[data-board-id="${boardId}"]`)
         if (button.childNodes[0].data !== "Show Cards") {
-
+            //console.log(button.textContent )
             let current_archive = document.querySelector(`.archive[archive-board-id="${boardId}"]`);
             if (current_archive === null) {
                 let current_board = document.querySelector(`.board-container[board-id="${boardId}"]`)
@@ -35,7 +37,7 @@ export let boardsManager = {
                 await boardsManager.archiveLoad(boardId)
             } else {
                 let parent = current_archive.parentNode
-                parent.removeChild(current_archive)
+                parent.removeChild(current_archive)//remove self nek működnie kellene
                 let current_board = document.querySelector(`.board-container[board-id="${boardId}"]`)
                 current_board.getElementsByClassName('toggle-archive-button')[0].innerHTML = "Show Archive"
             }

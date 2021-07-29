@@ -10,7 +10,7 @@ import mimetypes
 
 mimetypes.add_type('application/javascript', '.js')
 app = Flask(__name__)
-app.secret_key=os.environ.get("SECRET_KEY")
+app.secret_key = "kbjcadjknlasndlk"
 
 
 @app.before_first_request

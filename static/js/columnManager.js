@@ -15,7 +15,7 @@ export let columnsManager = {
             }
             let delete_buttons = document.querySelectorAll(`.delete-column-button[data-delete-status-id="${column.id}"], .delete-column-button[data-delete-owner-id="${column.owner}"]`)
             for (let delete_button of delete_buttons) {
-                if (delete_button.getAttribute('data-delete-owner-id') === 'global') {
+                if (delete_button.getAttribute('data-delete-owner-id') === 'global') {//node.dataset
                     delete_button.parentNode.removeChild(delete_button)
                 } else {
                     delete_button.addEventListener("click", columnsManager.deleteStatus)
