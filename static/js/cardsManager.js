@@ -68,23 +68,27 @@ export let cardsManager = {
         for (let card of cards){
             let cardId = await card.getAttribute('data-card-id')
             const cardData = await dataHandler.getCard(cardId)
-            card.addEventListener('dragover', e => {
-                e.preventDefault()
-                const draggable = document.querySelector('.dragging')
-                draggable.setAttribute('is_over_card', 'true')
-                draggable.setAttribute('prev_over_id', draggable.getAttribute('over_id'))
-                draggable.setAttribute('over_id', card.getAttribute('data-card-id'))
-                draggable.setAttribute('over_card', 'true')
+            card.addEventListener('dragover', cardsManager.addDragStatEvent)
 
-                if (draggable.getAttribute('over_id') !== draggable.getAttribute('prev_over_id')){
-                    card.parentNode.insertBefore(draggable, card)
-                }
-            })
             card.addEventListener('dragleave',e =>{
                 const draggable = document.querySelector('.dragging')
                 draggable.setAttribute('over_card', 'false')
             })
         }
+    },
+    addDragStatEvent: async function(clickEvent){
+        const card = clickEvent.currentTarget
+        console.log(card)
+        clickEvent.preventDefault()
+            const draggable = document.querySelector('.dragging')
+            draggable.setAttribute('is_over_card', 'true')
+            draggable.setAttribute('prev_over_id', draggable.getAttribute('over_id'))
+            draggable.setAttribute('over_id', card.getAttribute('data-card-id'))
+            draggable.setAttribute('over_card', 'true')
+
+            if (draggable.getAttribute('over_id') !== draggable.getAttribute('prev_over_id')){
+                card.parentNode.insertBefore(draggable, card)
+            }
     },
     changeCardTitle: function(clickEvent) {
         const cardId = clickEvent.target.attributes['card-title-id'].nodeValue;
