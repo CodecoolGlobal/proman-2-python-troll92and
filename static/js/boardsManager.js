@@ -76,7 +76,7 @@ export let boardsManager = {
             parent.removeChild(currentCard)
             if (archiveOpen !== "Show Archive"){
                 boardArchive.appendChild(currentCard)
-                //await currentCard.removeEventListener('dragend', cardsManager.insertDragged, false);
+                currentCard.removeEventListener('dragover', cardsManager.addDragStatEvent);
                 //await currentCard.removeEventListener('dragstart', cardsManager.insertDragged, false);
                 //await currentCard.removeEventListener('dragover', cardsManager.insertDragged, false);
                 //await currentCard.removeEventListener('dragleave', cardsManager.insertDragged, false);
