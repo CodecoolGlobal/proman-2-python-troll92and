@@ -1,4 +1,4 @@
-import { boardsManager } from "/static/js/boardsManager.js";
+import { boardsManager } from "./boardsManager.js";
 
 function init() {
   boardsManager.loadBoards()
