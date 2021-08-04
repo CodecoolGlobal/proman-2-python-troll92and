@@ -153,7 +153,7 @@ def get_last_board():
 @json_response
 def add_new_card():
     data = [
-        request.get_json()["title"],
+        request.get_json()["card_title"],
         request.get_json()["board_id"],
         request.get_json()["status_id"],
         request.get_json()["card_order"],

@@ -128,11 +128,13 @@ async function apiGet(url) {
 }
 
 async function apiPost(url, payload) {
+    console.log('ok before fetch')
     await fetch(url, {
         headers:{"Content-Type": 'application/json'},
         method: 'POST',
         body: JSON.stringify(payload)
     })
+    console.log('ok after fetch')
 }
 
 async function apiDelete(url) {
