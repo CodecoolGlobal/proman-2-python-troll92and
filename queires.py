@@ -179,8 +179,10 @@ def get_archived_cards(board_id):
 
 
 @data_manager.connection_handler
-def add_new_card(cursor, data):
-    cursor.execute(
+def add_new_card(data):
+    print('got into psql')
+    print(data)
+    data_manager.execute_select(
         sql.SQL("""
         INSERT INTO cards(title, board_id, status_id, card_order, archived)
         VALUES ({title},{board_id},{status_id},{card_order}, {archived})

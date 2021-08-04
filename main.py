@@ -1,6 +1,7 @@
-from flask import Flask, render_template, url_for, request, session, redirect
+from flask import Flask, render_template, url_for, request, session, redirect, make_response
 from util import json_response
 import smtplib
+
 
 import os
 
@@ -166,6 +167,8 @@ def add_new_card():
     print(request.get_json())
     print('ok')
     queires.add_new_card(data)
+    print('after query')
+    return make_response()
 
 
 @app.route("/add-new-status", methods=["POST"])
