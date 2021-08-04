@@ -251,5 +251,5 @@ def main():
         app.add_url_rule('/favicon.ico', redirect_to=url_for('static', filename='favicon/favicon.ico'))
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
