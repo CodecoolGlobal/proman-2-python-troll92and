@@ -168,7 +168,6 @@ def add_new_card():
     print('ok')
     queires.add_new_card(data)
     print('after query')
-    return make_response()
 
 
 @app.route("/add-new-status", methods=["POST"])
@@ -261,8 +260,8 @@ def rename_board_by_id():
 @app.route("/rename-column-by-id", methods=["POST"])
 @json_response
 def rename_column_by_id():
-    column_id = request.get_json()["column_title"]
-    column_title = request.get_json()["column_id"]
+    column_id = request.get_json()["column_id"]
+    column_title = request.get_json()["column_title"]
     queires.rename_column_by_id(column_id, column_title)
 
 
