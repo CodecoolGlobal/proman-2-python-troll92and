@@ -178,7 +178,6 @@ def get_archived_cards(board_id):
         , {"board_id": board_id})
 
 
-@data_manager.connection_handler
 def add_new_card(data):
     print('got into psql')
     print(data)
