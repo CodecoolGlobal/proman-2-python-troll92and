@@ -149,86 +149,117 @@ def get_last_board():
     return queires.get_max_id_board()
 
 
-@app.route("/add-new-card/<data>", methods=["POST"])
+@app.route("/add-new-card", methods=["POST"])
 @json_response
-def add_new_card(data):
-    queires.add_new_card(list(data.split(',')))
+def add_new_card():
+    data = [
+        request.get_json()["title"],
+        request.get_json()["board_id"],
+        request.get_json()["status_id"],
+        request.get_json()["card_order"],
+        request.get_json()["archived"]
+    ]
+    queires.add_new_card(data)
 
 
-@app.route("/add-new-status/<data>", methods=["POST"])
+@app.route("/add-new-status", methods=["POST"])
 @json_response
-def add_new_status(data):
-    queires.add_new_status(list(data.split(',')))
+def add_new_status():
+    data = [
+        request.get_json()["title"],
+        request.get_json()["table"]
+    ]
+    queires.add_new_status(data)
 
 
-@app.route("/add-new-board/<data>", methods=["POST"])
+@app.route("/add-new-board", methods=["POST"])
 @json_response
-def add_new_board(data):
+def add_new_board():
     if "username" in session:
-        data = [data, session['username']]
+        data = [request.get_json()["title"], session['username']]
         queires.add_new_board(data)
     else:
-        data = [data, "public"]
+        data = [request.get_json()["title"], "public"]
         queires.add_new_board(data)
 
 
-@app.route("/delete-board-by-id/<int:board_id>", methods=["POST"])
+@app.route("/delete-board-by-id", methods=["POST"])
 @json_response
-def delete_board_by_id(board_id):
+def delete_board_by_id():
+    board_id = request.get_json()["board_id"]
     queires.delete_all_cards_by_board_id(board_id)
     queires.delete_all_statuses_by_board_id(str(board_id))
     queires.delete_board_by_id(board_id)
 
 
-@app.route("/delete-status-by-id/<string:board_id>/<string:status_id>", methods=["POST"])
+@app.route("/delete-status-by-id", methods=["POST"])
 @json_response
-def delete_status_by_id(board_id, status_id):
+def delete_status_by_id():
+    board_id = request.get_json()["board_id"]
+    status_id = request.get_json()["status_id"]
     queires.delete_all_cards_by_board_status_id(board_id, status_id)
     queires.delete_all_statuses_by_board_status_id(str(board_id), status_id)
 
 
-@app.route("/delete-card-by-id/<string:card_id>", methods=["POST"])
+@app.route("/delete-card-by-id", methods=["POST"])
 @json_response
-def delete_card_by_id(card_id):
+def delete_card_by_id():
+    card_id = request.get_json()["card_id"]
     queires.delete_card_by_id(card_id)
 
 
-@app.route("/update-card-by-id/<data>", methods=["POST"])
+@app.route("/update-card-by-id", methods=["POST"])
 @json_response
-def update_card_position(data):
-    data = list(data.split(','))
+def update_card_position():
+    data = [
+        request.get_json()["id"],
+        request.get_json()["board_id"],
+        request.get_json()["status_id"]
+    ]
     queires.update_card_position(data)
 
 
-@app.route("/update-card-archive-status/<data>", methods=["POST"])
+@app.route("/update-card-archive-status", methods=["POST"])
 @json_response
-def update_card_archived_status(data):
-    data = list(data.split(','))
+def update_card_archived_status():
+    data = [
+        request.get_json()["id"],
+        request.get_json()["archived"]
+    ]
     queires.update_card_archive_status(data)
 
 
-@app.route("/update-card-order/<data>", methods=["POST"])
+@app.route("/update-card-order", methods=["POST"])
 @json_response
-def update_card_order(data):
-    data = list(data.split(','))
+def update_card_order():
+    data = [
+        request.get_json()["id"],
+        request.get_json()["card_order"]
+    ]
     queires.update_card_order(data)
 
 
-@app.route("/rename-board-by-id/<int:board_id>/<string:board_title>", methods=["POST"])
+@app.route("/rename-board-by-id", methods=["POST"])
 @json_response
-def rename_board_by_id(board_id, board_title):
+def rename_board_by_id():
+    board_id = request.get_json()["board_id"]
+    board_title = request.get_json()["board_title"]
     queires.rename_board_by_id(board_id, board_title)
 
 
-@app.route("/rename-column-by-id/<int:column_id>/<string:column_title>", methods=["POST"])
+@app.route("/rename-column-by-id", methods=["POST"])
 @json_response
-def rename_column_by_id(column_id, column_title):
+def rename_column_by_id():
+    column_id = request.get_json()["column_title"]
+    column_title = request.get_json()["column_id"]
     queires.rename_column_by_id(column_id, column_title)
 
 
-@app.route("/rename-card-by-id/<int:card_id>/<string:card_title>", methods=["POST"])
+@app.route("/rename-card-by-id", methods=["POST"])
 @json_response
-def rename_card_by_id(card_id, card_title):
+def rename_card_by_id():
+    card_id = request.get_json()['card_id']
+    card_title = request.get_json()['card_title']
     queires.rename_card_by_id(card_id, card_title)
 
 
