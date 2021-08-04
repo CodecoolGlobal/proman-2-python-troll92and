@@ -186,9 +186,11 @@ def add_new_status():
 def add_new_board():
     if "username" in session:
         data = [request.get_json()["title"], session['username']]
+        print(data)
         queires.add_new_board(data)
     else:
         data = [request.get_json()["title"], "public"]
+        print(data)
         queires.add_new_board(data)
 
 

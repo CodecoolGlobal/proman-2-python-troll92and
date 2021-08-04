@@ -212,8 +212,8 @@ def add_new_status(cursor, data):
 def add_new_board(cursor, data):
     cursor.execute(
         sql.SQL("""
-        INSERT INTO boards(title, owner)
-        VALUES ({title}, {owner})
+            INSERT INTO boards(title, owner)
+            VALUES ({title}, {owner})
         """).format(
             title=sql.Literal(data[0]),
             owner=sql.Literal(data[1])

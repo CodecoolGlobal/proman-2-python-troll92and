@@ -122,7 +122,7 @@ async function addBoard(){
         title : 'New Board'
     }
     await dataHandler.createNewBoard(board.title)
-    board.id = await dataHandler.getLastBoardId()+1
+    board.id = await dataHandler.getLastBoardId()
     const boardBuilder = htmlFactory(htmlTemplates.board)
     let table=boardBuilder(board)
     domManager.addChild(`#root`, table)
