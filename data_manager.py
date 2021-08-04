@@ -12,7 +12,7 @@ def establish_connection(connection_data=None):
     if connection_data is None:
         connection_data = get_connection_data()
     try:
-        connect_str = os.environ.get('DATABASE_URL')
+        connect_str = os.environ.get('proman202108.herokuapp.com')
         conn = psycopg2.connect(connect_str)
         conn.autocommit = True
     except psycopg2.DatabaseError as e:
@@ -22,21 +22,21 @@ def establish_connection(connection_data=None):
         return conn
 
 
-# def get_connection_data(db_name=None):
-#     """
-#     Give back a properly formatted dictionary based on the environment variables values which are started
-#     with :MY__PSQL_: prefix
-#     :db_name: optional parameter. By default it uses the environment variable value.
-#     """
-#     if db_name is None:
-#         db_name = os.environ.get('MY_PSQL_DBNAME')
-#
-#     return {
-#         'dbname': db_name,
-#         'user': os.environ.get('MY_PSQL_USER'),
-#         'host': os.environ.get('MY_PSQL_HOST'),
-#         'password': os.environ.get('MY_PSQL_PASSWORD')
-#     }
+def get_connection_data(db_name=None):
+    """
+    Give back a properly formatted dictionary based on the environment variables values which are started
+    with :MY__PSQL_: prefix
+    :db_name: optional parameter. By default it uses the environment variable value.
+    """
+    if db_name is None:
+        db_name = os.environ.get('MY_PSQL_DBNAME')
+
+    return {
+        'dbname': db_name,
+        'user': os.environ.get('MY_PSQL_USER'),
+        'host': os.environ.get('MY_PSQL_HOST'),
+        'password': os.environ.get('MY_PSQL_PASSWORD')
+    }
 
 
 def execute_select(statement, variables=None, fetchall=True):
@@ -56,23 +56,23 @@ def execute_select(statement, variables=None, fetchall=True):
     return result_set
 
 
-# def get_connection_string():
-#     user_name = os.environ.get('MY_PSQL_USER')
-#     password = os.environ.get('MY_PSQL_PASSWORD')
-#     host = os.environ.get('MY_PSQL_HOST')
-#     database_name = os.environ.get('MY_PSQL_DBNAME')
-#
-#     env_variables_defined = user_name and password and host and database_name
-#
-#     if env_variables_defined:
-#         return 'postgresql://{user_name}:{password}@{host}/{database_name}'.format(
-#             user_name=user_name,
-#             password=password,
-#             host=host,
-#             database_name=database_name
-#         )
-#     else:
-#         raise KeyError('Some necessary environment variable(s) are not defined')
+def get_connection_string():
+    user_name = os.environ.get('MY_PSQL_USER')
+    password = os.environ.get('MY_PSQL_PASSWORD')
+    host = os.environ.get('MY_PSQL_HOST')
+    database_name = os.environ.get('MY_PSQL_DBNAME')
+
+    env_variables_defined = user_name and password and host and database_name
+
+    if env_variables_defined:
+        return 'postgresql://{user_name}:{password}@{host}/{database_name}'.format(
+            user_name=user_name,
+            password=password,
+            host=host,
+            database_name=database_name
+        )
+    else:
+        raise KeyError('Some necessary environment variable(s) are not defined')
 
 
 def open_database():
