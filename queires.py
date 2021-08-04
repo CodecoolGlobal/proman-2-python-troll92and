@@ -181,10 +181,9 @@ def get_archived_cards(board_id):
 def add_new_card(data):
     print('got into psql')
     print(data)
-    data_manager.execute_select(
-        sql.SQL("""
+    query = sql.SQL("""
         INSERT INTO cards(title, board_id, status_id, card_order, archived)
-        VALUES ({title},{board_id},{status_id},{card_order}, {archived})
+        VALUES ({title}, {board_id}, {status_id}, {card_order}, {archived})
         """).format(
             title=sql.Literal(data[0]),
             board_id=sql.Literal(data[1]),
@@ -192,7 +191,9 @@ def add_new_card(data):
             card_order=sql.Literal(data[3]),
             archived=sql.Literal(data[4])
         )
-    )
+    print(query)
+    data_manager.execute_select(query)
+    print('after datamanager.executeselect')
 
 
 @data_manager.connection_handler
