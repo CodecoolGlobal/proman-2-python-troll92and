@@ -12,7 +12,7 @@ def establish_connection(connection_data=None):
     if connection_data is None:
         connection_data = get_connection_data()
     try:
-        connect_str = os.environ.get('proman202108.herokuapp.com')
+        connect_str = os.environ.get('https://data.heroku.com/datastores/7773cd89-e87e-4c50-94c8-d8340fb16f4b')
         conn = psycopg2.connect(connect_str)
         conn.autocommit = True
     except psycopg2.DatabaseError as e:
