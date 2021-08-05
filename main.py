@@ -153,8 +153,6 @@ def get_last_board():
 @app.route("/add-new-card", methods=["POST"])
 @json_response
 def add_new_card():
-    print(request.get_json())
-    print('ok after getting to py')
     data = [
         request.get_json()["card_title"],
         request.get_json()["board_id"],
@@ -162,12 +160,7 @@ def add_new_card():
         request.get_json()["card_order"],
         request.get_json()["archived"]
     ]
-    print(data)
-    print(data[0])
-    print(request.get_json())
-    print('ok')
     queires.add_new_card(data)
-    print('after query')
 
 
 @app.route("/add-new-status", methods=["POST"])
@@ -185,11 +178,9 @@ def add_new_status():
 def add_new_board():
     if "username" in session:
         data = [request.get_json()["board_title"], session['username']]
-        print(data)
         queires.add_new_board(data)
     else:
         data = [request.get_json()["board_title"], "public"]
-        print(data)
         queires.add_new_board(data)
 
 

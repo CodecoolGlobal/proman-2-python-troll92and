@@ -180,8 +180,6 @@ def get_archived_cards(board_id):
 
 @data_manager.connection_handler
 def add_new_card(cursor, data):
-    print('got into psql')
-    print(data)
     cursor.execute(sql.SQL("""
         INSERT INTO cards(title, board_id, status_id, card_order, archived)
         VALUES ({title}, {board_id}, {status_id}, {card_order}, {archived})
@@ -192,7 +190,6 @@ def add_new_card(cursor, data):
             card_order=sql.Literal(data[3]),
             archived=sql.Literal(data[4])
         ))
-    print('after datamanager.executeselect')
 
 
 @data_manager.connection_handler
