@@ -51,52 +51,65 @@ export let dataHandler = {
 
     createNewBoard: async function (boardTitle) {
         // creates new card, saves it and calls the callback function with its data
-        await apiPost(`/add-new-board/${boardTitle}`)
+        let payload = {"board_title": boardTitle}
+        await apiPost("/add-new-board", payload)
     },
 
     createNewStatus: async function (title, table="global") {
         // creates new card, saves it and calls the callback function with its data
-        let payload = [title,table];
-        await apiPost(`/add-new-status/${payload}`)
+        let payload = {"title": title, "table": table}
+        await apiPost("/add-new-status",payload)
     },
 
     createNewCard: async function (cardTitle, boardId, statusId, cardOrder, archived) {
         // creates new card, saves it and calls the callback function with its data
-        let payload = [cardTitle, boardId, statusId, cardOrder, archived];
-        await apiPost(`/add-new-card/${payload}`)
+        let payload = {
+            "card_title": cardTitle, 
+            "board_id": boardId,
+            "status_id": statusId,
+            "card_order": cardOrder,
+            "archived": archived
+        }
+        await apiPost("/add-new-card",payload)
     },
 
     deleteBoardById: async function(boardId){
-        await apiPost(`/delete-board-by-id/${boardId}`)
+        let payload = {"board_id": boardId}
+        await apiPost("/delete-board-by-id",payload)
     },
 
     deleteStatusById: async function(boardId, statusId){
-        await apiPost(`/delete-status-by-id/${boardId}/${statusId}`)
+        let payload = {"board_id": boardId, "status_id": statusId}
+        await apiPost("/delete-status-by-id", payload)
     },
 
-    deleteCardById: async function(card_id){
-        await apiPost(`/delete-card-by-id/${card_id}`)
+    deleteCardById: async function(cardId){
+        let payload = {"card_id": cardId}
+        await apiPost("/delete-card-by-id", payload)
     },
-    updateCardOrder: async function(id, card_order){
-        let payload = [id, card_order];
-        await apiPost(`/update-card-order/${payload}`)
+    updateCardOrder: async function(id, cardOrder){
+        let payload = {"id": id, "card_order": cardOrder}
+        await apiPost("/update-card-order", payload)
     },
-    updateCardPosition: async function(id, board_id, status_id){
-        let payload = [id, board_id, status_id];
-        await apiPost(`/update-card-by-id/${payload}`)
+    updateCardPosition: async function(id, boardId, statusId){
+        let payload = {"id": id, "board_id": boardId, "status_id": statusId }
+        await apiPost("/update-card-by-id",payload)
     },
     updateCardArchivedStatus: async function(id, archived){
-        let payload = [id, archived];
-        await apiPost(`/update-card-archive-status/${payload}`)
+        let payload = {"id": id, "archived": archived}
+        await apiPost("/update-card-archive-status", payload)
     },
     renameBoard: async function(boardId, boardTitle){
-        await apiPost(`/rename-board-by-id/${boardId}/${boardTitle}`)
+        let payload = {"board_id": boardId, "board_title": boardTitle}
+        await apiPost("/rename-board-by-id", payload)
     },
     renameColumn: async function(columnId, columnTitle){
-        await apiPost(`/rename-column-by-id/${columnId}/${columnTitle}`)
+        let payload = {'column_id': columnId, 'column_title': columnTitle}
+        await apiPost("/rename-column-by-id",payload)
     },
     renameCard: async function(cardId, cardTitle){
-        await apiPost(`/rename-card-by-id/${cardId}/${cardTitle}`)
+        let payload = {"card_id": cardId, "card_title": cardTitle}
+        await apiPost(`/rename-card-by-id`,payload)
     },
 
 
@@ -114,9 +127,11 @@ async function apiGet(url) {
     }
 }
 
-async function apiPost(url) {
+async function apiPost(url, payload) {
     await fetch(url, {
+        headers:{"Content-Type": 'application/json'},
         method: 'POST',
+        body: JSON.stringify(payload)
     })
 }
 

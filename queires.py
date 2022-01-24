@@ -180,18 +180,16 @@ def get_archived_cards(board_id):
 
 @data_manager.connection_handler
 def add_new_card(cursor, data):
-    cursor.execute(
-        sql.SQL("""
+    cursor.execute(sql.SQL("""
         INSERT INTO cards(title, board_id, status_id, card_order, archived)
-        VALUES ({title},{board_id},{status_id},{card_order}, {archived})
+        VALUES ({title}, {board_id}, {status_id}, {card_order}, {archived})
         """).format(
             title=sql.Literal(data[0]),
             board_id=sql.Literal(data[1]),
             status_id=sql.Literal(data[2]),
             card_order=sql.Literal(data[3]),
             archived=sql.Literal(data[4])
-        )
-    )
+        ))
 
 
 @data_manager.connection_handler
@@ -211,8 +209,8 @@ def add_new_status(cursor, data):
 def add_new_board(cursor, data):
     cursor.execute(
         sql.SQL("""
-        INSERT INTO boards(title, owner)
-        VALUES ({title}, {owner})
+            INSERT INTO boards(title, owner)
+            VALUES ({title}, {owner})
         """).format(
             title=sql.Literal(data[0]),
             owner=sql.Literal(data[1])

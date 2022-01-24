@@ -78,7 +78,6 @@ export let cardsManager = {
     },
     addDragStatEvent: async function(clickEvent){
         const card = clickEvent.currentTarget
-        console.log(card)
         clickEvent.preventDefault()
             const draggable = document.querySelector('.dragging')
             draggable.setAttribute('is_over_card', 'true')
